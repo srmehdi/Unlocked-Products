@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="favGradient" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FF7A18"/>
+      <stop offset="100%" stop-color="#2BB0ED"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Lock body -->
+  <rect x="14" y="28" width="36" height="30" rx="6" ry="6" fill="url(#favGradient)"/>
+
+  <!-- Lock shackle (unlocked) -->
+  <path d="M22 28 V20 C22 14 42 14 42 20"
+        fill="none"
+        stroke="url(#favGradient)"
+        stroke-width="4"
+        stroke-linecap="round"/>
+
+  <!-- Check mark -->
+  <path d="M26 44 L31 49 L40 38"
+        fill="none"
+        stroke="#0B1C2D"
+        stroke-width="4"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+</svg>

@@ -1,0 +1,51 @@
+<section class="flex items-center justify-center min-h-screen">
+  <div
+    class="w-full max-w-md inset-ring inset-ring-white/10 bg-slate-900 border border-slate-800 rounded-xl p-8"
+  >
+    <h1 class="text-4xl font-bold text-center mb-4 text-white">Login</h1>
+    <div class="flex justify-center mb-6">
+      <img src="./../../../assets/images/logo.svg" alt="UnlockedProducts logo" width="280" />
+    </div>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-6">
+      <div>
+        <label class="block text-sm text-slate-300 mb-2">Email Address</label>
+        <input
+          type="email"
+          formControlName="email"
+          placeholder="you@example.com"
+          class="w-full rounded-lg bg-slate-950 border border-slate-800 px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500"
+        />
+        <div
+          *ngIf="email.invalid && (email.dirty || email.touched)"
+          class="text-sm text-red-600 mt-1"
+        >
+          <div *ngIf="email.errors?.['required']">Email is required.</div>
+          <div *ngIf="email.errors?.['email']">Enter a valid email.</div>
+        </div>
+      </div>
+      <div>
+        <label class="block text-sm text-slate-300 mb-2">Email Address</label>
+        <input
+          type="password"
+          formControlName="password"
+          placeholder="••••••"
+          class="w-full rounded-lg bg-slate-950 border border-slate-800 px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500"
+        />
+        <div
+          *ngIf="password.invalid && (password.dirty || password.touched)"
+          class="text-sm text-red-600 mt-1"
+        >
+          <div *ngIf="password.errors?.['required']">Password is required.</div>
+          <div *ngIf="password.errors?.['minlength']">Password must be at least 6 characters.</div>
+        </div>
+      </div>
+      <button
+        type="submit"
+        class="w-full bg-sky-500 hover:bg-sky-600 text-slate-950 font-semibold rounded-lg py-3 mb-6 transition cursor-not-allowed disabled:opacity-50 enabled:cursor-pointer"
+        [disabled]="loginForm.invalid"
+      >
+        Sign in
+      </button>
+    </form>
+  </div>
+</section>

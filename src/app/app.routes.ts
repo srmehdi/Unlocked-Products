@@ -1,0 +1,43 @@
+import { Routes } from '@angular/router';
+import { Login } from './features/login/login';
+import { roleGuard } from './core/guards/role-guard/role-guard';
+
+export const routes: Routes = [
+  {
+    path: '',
+    component: Login,
+    pathMatch: 'full',
+  },
+  {
+    path: 'dashboard',
+    canActivate: [roleGuard],
+    // canActivateChild: [roleGuard],
+    loadComponent: () => import('./features/dashboard/dashboard').then((c) => c.Dashboard),
+    children: [
+      {
+        path: 'employee',
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('./features/employee/employee-dashboard/employee-dashboard').then(
+                (c) => c.EmployeeDashboard
+              ),
+          },
+        ],
+      },
+      {
+        path: 'about',
+        loadComponent: () => import('./features/about/about').then((c) => c.About),
+      },
+      {
+        path: 'contact',
+        loadComponent: () => import('./features/contact/contact').then((c) => c.Contact),
+      },
+    ],
+  },
+  {
+    path: '**',
+    component: Login,
+  },
+];
