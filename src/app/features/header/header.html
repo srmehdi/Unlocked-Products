@@ -1,10 +1,30 @@
 <header>
   <div class="fixed z-100 inset-x-0 border-b border-white/10 top-0">
-    <div class="main-container h-full w-full flex items-center bg-gray-950 text-gray-200">
-      <nav class="max-md:absolute max-md:top-2">
+    <div
+      class="main-container h-full w-full bg-secondary-100 text-gray-200 px-4 shadow-xl/30 shadow-amber-950"
+    >
+      <nav class="">
         <div class="mx-auto">
-          <div class="flex justify-between items-center text-xl font-medium">
-            <div class="max-md:hidden flex-shrink-0">
+          <div class="flex items-center text-xl font-medium">
+            <div class="md:hidden">
+              <button (click)="toggleMenu()" class="text-gray-700">
+                <svg
+                  class="w-10 h-10"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M4 6h16M4 12h16M4 18h16"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+            <div class="shrink-0 max-md:w-full max-md:flex max-md:justify-center">
               <a routerLink="/dashboard/employee" class="">
                 <img
                   src="./../../../assets/images/logo.svg"
@@ -33,42 +53,27 @@
                 >Contact</a
               >
             </div>
-            <div class="md:hidden">
-              <button
-                (click)="toggleMenu()"
-                class="text-gray-700 hover:text-blue-600 focus:outline-none transition duration-300"
-              >
-                <svg
-                  class="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M4 6h16M4 12h16M4 18h16"
-                  ></path>
-                </svg>
-              </button>
-            </div>
           </div>
-          <div [class.hidden]="!isMenuOpen" class="md:hidden pb-4 bg-orange-300">
+          <div [class.hidden]="!isMenuOpen" class="md:hidden pb-4 font-medium">
             <a
               routerLink="/dashboard/employee"
-              class="block px-2 py-2 text-gray-700 hover:text-blue-600 transition duration-300"
+              routerLinkActive="bg-white rounded hover:text-gray-700! text-chestnut!"
+              class="block px-2 py-2 text-gray-700"
+              (click)="isMenuOpen = false"
               >Home</a
             >
             <a
               routerLink="/dashboard/about"
-              class="block px-2 py-2 text-gray-700 hover:text-blue-600 transition duration-300"
+              routerLinkActive="bg-white rounded hover:text-gray-700! text-chestnut!"
+              class="block px-2 py-2 text-gray-700"
+              (click)="isMenuOpen = false"
               >About</a
             >
             <a
               routerLink="/dashboard/contact"
-              class="block px-2 py-2 text-gray-700 hover:text-blue-600 transition duration-300"
+              routerLinkActive="bg-white rounded hover:text-gray-700! text-chestnut!"
+              class="block px-2 py-2 text-gray-700"
+              (click)="isMenuOpen = false"
               >Contact</a
             >
           </div>

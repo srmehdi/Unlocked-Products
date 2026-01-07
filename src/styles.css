@@ -4,10 +4,18 @@
 
 @theme {
   --color-chestnut: #782f29;
+  --color-beige: #f5f5dc;
+  --color-beige-lighter: #f5f5dc;
+  --color-beige-darker: #eff5dc;
+  --color-primary: #a77d5c;
+  --color-secondary: #f9ebdb;
+  --color-tertiary: #9c8062;
+  --color-secondary-50: #e5ccb2;
+  --color-secondary-100: #9c8062;
 }
 @layer base {
   body {
-    @apply bg-gray-950;
+    @apply bg-secondary;
   }
   h1 {
     font-size: var(--text-2xl);
@@ -26,8 +34,9 @@
   .card {
     /* @apply rounded-lg bg-white px-6 py-8 shadow-md ring-1 ring-slate-900/5; */
     /* @apply rounded-lg shadow-md ring-1 ring-slate-900/5 bg-gray-950 text-gray-200 py-20 px-6; */
-    @apply rounded-lg shadow-md inset-ring inset-ring-white/10 bg-slate-900 border border-slate-800 text-gray-200 py-20 px-6;
+    /* @apply rounded-lg shadow-md inset-ring inset-ring-white/10 bg-slate-900 border border-slate-800 text-gray-200 py-20 px-6; */
     /* @apply rounded-lg inset-ring inset-ring-white/10 bg-slate-900 border border-slate-800 py-20 px-6; */
+    @apply rounded-lg shadow-xl bg-secondary-50 text-tertiary py-12 px-6;
   }
 }
 
@@ -38,7 +47,7 @@
 } */
 
 .main-container {
-  max-width: 1300px;
+  max-width: 1200px;
   margin: auto;
 }
 
