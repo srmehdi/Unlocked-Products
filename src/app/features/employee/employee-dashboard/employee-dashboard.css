@@ -1,0 +1,42 @@
+@keyframes carousel {
+  0%,
+  15% {
+    transform: translateX(0%);
+  }
+  20%,
+  35% {
+    transform: translateX(-20%);
+  }
+  40%,
+  55% {
+    transform: translateX(-40%);
+  }
+  60%,
+  75% {
+    transform: translateX(-60%);
+  }
+  80%,
+  100% {
+    transform: translateX(-80%);
+  }
+}
+
+.animate-carousel {
+  animation: carousel 25s infinite ease-in-out;
+}
+
+/* Dot base */
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 9999px;
+  background: #9c8062; /* slate-600 */
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Active dot */
+.dot-active {
+  background: #38bdf8; /* sky-400 */
+  transform: scale(1.4);
+}
