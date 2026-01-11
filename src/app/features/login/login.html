@@ -39,7 +39,7 @@
       </div>
       <button
         type="submit"
-        class="w-full bg-tertiary enabled:hover:bg-sky-600 text-slate-950 font-semibold rounded-lg py-3 mb-6 transition cursor-not-allowed disabled:opacity-50 enabled:cursor-pointer"
+        class="w-full bg-tertiary enabled:hover:bg-sky-600 text-slate-100 font-semibold rounded-lg py-3 mb-6 transition cursor-not-allowed disabled:opacity-50 enabled:cursor-pointer"
         [disabled]="loginForm.invalid"
       >
         Sign in
@@ -63,3 +63,4 @@
   </div>
   }
 </section>
+<app-status-modal #modal />

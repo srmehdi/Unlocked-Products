@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { User } from '../../models/interface';
+import { Product, User } from '../../models/interface';
 import { Encryption } from '../encryption/encryption';
 
 @Injectable({
@@ -13,6 +13,23 @@ export class Storage {
   getUser() {
     const result = this.getItem('user');
     return result ? JSON.parse(result) : {};
+  }
+  // setProduct(product: Product) {
+  //   return this.setItem('product', product);
+  // }
+  // getProduct() {
+  //   const result = this.getItem('product');
+  //   return result ? JSON.parse(result) : {};
+  // }
+  setProduct(products: Product[]) {
+    return this.setItem('product', products);
+  }
+  getProduct() {
+    const result = this.getItem('product');
+    return result ? JSON.parse(result) : [];
+  }
+  removeProduct() {
+    this.removeItem('product');
   }
   private setItem<T>(key: string, value: T): void {
     try {

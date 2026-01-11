@@ -13,8 +13,8 @@ exports.handler = async (event) => {
     }
 
     const res = await query(
-      'INSERT INTO "user" (email, password, name) VALUES ($1, $2, $3) RETURNING *',
-      [email, password, name || null]
+      'INSERT INTO "user" (email, password, name, role) VALUES ($1, $2, $3, $4) RETURNING *',
+      [email, password, name, role || null]
     );
 
     return { statusCode: 201, body: JSON.stringify(res.rows[0] || {}) };
