@@ -1,99 +1,94 @@
 <section class="card">
-  <div class="max-w-5xl mx-auto">
-    <h1 class="text-4xl font-bold mb-6 border-b-2 pb-6">
-      <span class="text-sky-400">Welcome, </span>{{ user.email }}
+  <div class="max-w-5xl mx-auto space-y-12">
+    <h1 class="text-4xl font-bold mb-6 border-b-2 pb-6 text-shadow-lg">
+      <span class="text-sky-400">Welcome, </span>{{ user?.email }}
     </h1>
-    <h2 class="text-3xl font-bold text-slate-100 mb-10 text-center">Top 5 Rated Products</h2>
+    <h2 class="text-3xl font-bold mb-10 text-center text-shadow-lg">Top Rated Products</h2>
 
+    @if (products().length>0) {
     <div class="relative overflow-hidden rounded-xl bg-beige-darker shadow-2xl mb-20">
-      <input type="radio" name="carousel" id="s1" checked class="hidden peer/s1" />
-      <input type="radio" name="carousel" id="s2" class="hidden peer/s2" />
-      <input type="radio" name="carousel" id="s3" class="hidden peer/s3" />
-      <input type="radio" name="carousel" id="s4" class="hidden peer/s4" />
-      <input type="radio" name="carousel" id="s5" class="hidden peer/s5" />
-
       <div
-        class="flex w-[500%] transition-transform duration-700 ease-in-out animate-carousel peer-checked/s1:translate-x-0 peer-checked/s1:animate-none peer-checked/s2:-translate-x-1/5 peer-checked/s2:animate-none peer-checked/s3:-translate-x-2/5 peer-checked/s3:animate-none peer-checked/s4:-translate-x-3/5 peer-checked/s4:animate-none peer-checked/s5:-translate-x-4/5 peer-checked/s5:animate-none"
+        class="flex transition-transform duration-700 ease-in-out"
+        [style.width.%]="products().length * 100"
+        [style.transform]="'translateX(-' + activeIndex() * (100 / products().length) + '%)'"
       >
+        @for (product of products(); track $index) {
         <div class="w-full p-8 text-center">
-          <img src="./../../../../assets/images/logo.svg" class="mx-auto mb-4 rounded-xl" />
-          <h3 class="text-lg font-semibold text-tertiary">Product Alpha</h3>
-          <div class="text-yellow-400 text-lg my-2">★★★★★</div>
-          <p class="text-slate-400 text-sm">4.9 / 5</p>
-        </div>
+          @if(product?.imageBase64?.length){
+          <img
+            [src]="product?.imageBase64?.[0]"
+            class="h-100 w-full object-cover rounded-lg mb-4"
+          />
+          } @else {
+          <img
+            src="./../../../../assets/images/placeholder_product_dark.svg"
+            alt="No image"
+            class="h-100 w-full object-cover rounded-lg mb-4"
+          />
+          }
+          <h1 class="text-2xl font-bold text-tertiary">
+            {{ product.productName }}
+          </h1>
 
-        <div class="w-full p-8 text-center">
-          <img src="./../../../../assets/images/logo.svg" class="mx-auto mb-4 rounded-xl" />
-          <h3 class="text-lg font-semibold text-tertiary">Product Beta</h3>
-          <div class="text-yellow-400 text-lg my-2">★★★★☆</div>
-          <p class="text-slate-400 text-sm">4.7 / 5</p>
-        </div>
+          <h1 class="text-xl font-semibold text-tertiary mb-2">
+            {{ product?.productSummary }}
+          </h1>
+          <p class="text-lg leading-relaxed mb-4">
+            {{ product?.editorReview }}
+          </p>
 
-        <div class="w-full p-8 text-center">
-          <img src="./../../../../assets/images/logo.svg" class="mx-auto mb-4 rounded-xl" />
-          <h3 class="text-lg font-semibold text-tertiary">Product Gamma</h3>
-          <div class="text-yellow-400 text-lg my-2">★★★★☆</div>
-          <p class="text-slate-400 text-sm">4.6 / 5</p>
+          <p class="text-slate-400 text-sm">{{ product.editorRating }} / 5</p>
         </div>
-
-        <div class="w-full p-8 text-center">
-          <img src="./../../../../assets/images/logo.svg" class="mx-auto mb-4 rounded-xl" />
-          <h3 class="text-lg font-semibold text-tertiary">Product Delta</h3>
-          <div class="text-yellow-400 text-lg my-2">★★★★☆</div>
-          <p class="text-slate-400 text-sm">4.5 / 5</p>
-        </div>
-
-        <div class="w-full p-8 text-center">
-          <img src="./../../../../assets/images/logo.svg" class="mx-auto mb-4 rounded-xl" />
-          <h3 class="text-lg font-semibold text-tertiary">Product Omega</h3>
-          <div class="text-yellow-400 text-lg my-2">★★★★☆</div>
-          <p class="text-slate-400 text-sm">4.4 / 5</p>
-        </div>
+        }
       </div>
 
       <div class="flex justify-center gap-4 pb-6">
-        <label for="s1" class="dot peer-checked/s1:dot-active"></label>
-        <label for="s2" class="dot peer-checked/s2:dot-active"></label>
-        <label for="s3" class="dot peer-checked/s3:dot-active"></label>
-        <label for="s4" class="dot peer-checked/s4:dot-active"></label>
-        <label for="s5" class="dot peer-checked/s5:dot-active"></label>
+        @for (item of products(); track $index) {
+        <button
+          (click)="goTo($index)"
+          class="dot"
+          [class.dot-active]="$index === activeIndex()"
+          aria-label="Go to slide"
+        ></button>
+        }
       </div>
     </div>
+    } @else {
+    <div class="text-lg">No products available.</div>
+    }
 
-    <h2 class="text-3xl font-bold text-tertiary mb-10 text-left">All Products</h2>
+    <h2 class="text-3xl font-bold text-tertiary mb-10 text-left text-shadow-lg">All Products</h2>
+    @if(products().length>0){
     <div class="grid gap-8 md:grid-cols-3 mb-14">
-      <div class="bg-beige-lighter shadow-2xl rounded-xl p-6 text-center">
-        <h3 class="text-xl font-semibold mb-3">Product 1</h3>
-        <div class="text-yellow-400 text-lg my-2">★★★★☆</div>
-        <p class="text-slate-400 text-sm">4.5 / 5</p>
+      @for (product of products(); track $index) {
+      <div
+        class="bg-beige-lighter shadow-2xl rounded-xl p-6 text-center cursor-pointer border border-beige-lighter hover:border-sky-500 transition"
+        (click)="navigateToProductPage(product)"
+      >
+        @if(product?.imageBase64?.length){
+        <img [src]="product?.imageBase64?.[0]" class="h-48 w-full object-cover rounded-lg mb-4" />
+        } @else {
+        <img
+          src="./../../../../assets/images/placeholder_product_dark.svg"
+          alt="No image"
+          class="h-48 w-full object-cover rounded-lg mb-4"
+        />
+        }
+        <h3 class="font-semibold mb-3">{{ product?.productName }}</h3>
+        <h5 class="font-semibold mb-3">{{ product?.productSummary }}</h5>
+        <!-- <div class="text-yellow-400 text-lg my-2">★★★★☆</div> -->
+        <!-- <p class="text-slate-400 text-sm">{{ product?.userRating }} / 5</p> -->
+        <p class="text-slate-400 text-sm">
+          <!-- {{ product?.userRating }} <span class="text-lg">★</span> ({{ product.totalUsersRated }}
+          reviews) -->
+          {{ product?.editorRating }} <span class="text-lg text-yellow-400">★</span>
+        </p>
       </div>
-      <div class="bg-beige shadow-2xl rounded-xl p-6 text-center">
-        <h3 class="text-xl font-semibold mb-3">Product 2</h3>
-        <div class="text-yellow-400 text-lg my-2">★★★★☆</div>
-        <p class="text-slate-400 text-sm">4.5 / 5</p>
-      </div>
-
-      <div class="bg-beige-darker shadow-2xl rounded-xl p-6 text-center">
-        <h3 class="text-xl font-semibold mb-3">Product 3</h3>
-        <div class="text-yellow-400 text-lg my-2">★★★★☆</div>
-        <p class="text-slate-400 text-sm">4.5 / 5</p>
-      </div>
-      <div class="bg-beige-lighter shadow-2xl rounded-xl p-6 text-center">
-        <h3 class="text-xl font-semibold mb-3">Product 4</h3>
-        <div class="text-yellow-400 text-lg my-2">★★★★☆</div>
-        <p class="text-slate-400 text-sm">4.5 / 5</p>
-      </div>
-      <div class="bg-beige shadow-2xl rounded-xl p-6 text-center">
-        <h3 class="text-xl font-semibold mb-3">Product 5</h3>
-        <div class="text-yellow-400 text-lg my-2">★★★★☆</div>
-        <p class="text-slate-400 text-sm">4.5 / 5</p>
-      </div>
-
-      <div class="bg-beige-darker shadow-2xl rounded-xl p-6 text-center">
-        <h3 class="text-xl font-semibold mb-3">Product 6</h3>
-        <div class="text-yellow-400 text-lg my-2">★★★★☆</div>
-        <p class="text-slate-400 text-sm">4.5 / 5</p>
-      </div>
+      }
     </div>
+    } @else {
+    <div class="text-lg">No products available.</div>
+    }
   </div>
 </section>
+<app-status-modal #modal />

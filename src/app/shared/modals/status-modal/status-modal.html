@@ -1,0 +1,54 @@
+@if (state()) {
+<div
+  class="fixed inset-0 z-500 flex items-center justify-center bg-black/60"
+  aria-modal="true"
+  role="dialog"
+>
+  <div
+    class="w-100 max-md:m-4 rounded-2xl bg-beige px-6 py-12 text-center shadow-xl animate-[fadeIn_0.2s_ease-out]"
+  >
+    <!-- Icon -->
+    <div class="mb-4 flex justify-center">
+      @if (state() === 'loading') {
+      <div
+        class="h-10 w-10 animate-spin rounded-full border-4 border-[#E0D7CB] border-t-[#C2A878]"
+        aria-busy="true"
+      ></div>
+      } @else if(state() === 'success') {
+      <div class="text-4xl">✅</div>
+      } @else {
+      <div class="text-4xl text-[#9C3B2E]">⚠</div>
+      }
+    </div>
+
+    <!-- Title -->
+    <h2 class="mb-2 text-lg font-bold text-tertiary">
+      {{ title() }}
+    </h2>
+
+    <!-- Message -->
+    <p class="text-sm font-medium text-secondary-100">
+      {{ message() }}
+    </p>
+
+    <!-- Actions -->
+    @if (state() === 'error' || state() === 'success') {
+    <div class="mt-6 flex justify-center gap-3">
+      <!-- <button
+        class="rounded-lg bg-[#C2A878] px-4 py-2 text-sm font-medium text-white hover:bg-[#B89B68] transition"
+        (click)="retry()"
+      >
+        Retry
+      </button> -->
+
+      <button
+        class="rounded-lg bg-[#E6DED3] px-4 py-3 text-sm font-medium text-tertiary hover:bg-[#DDD3C5] transition w-40"
+        (click)="close()"
+      >
+        Continue
+      </button>
+    </div>
+    }
+  </div>
+</div>
+}

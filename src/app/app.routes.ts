@@ -34,6 +34,16 @@ export const routes: Routes = [
         path: 'contact',
         loadComponent: () => import('./features/contact/contact').then((c) => c.Contact),
       },
+      {
+        path: 'add-product',
+        loadComponent: () =>
+          import('./features/product/add-product/add-product').then((c) => c.AddProduct),
+      },
+      {
+        path: 'product/:id',
+        loadComponent: () =>
+          import('./features/product/product-detail/product-detail').then((c) => c.ProductDetail),
+      },
     ],
   },
   {

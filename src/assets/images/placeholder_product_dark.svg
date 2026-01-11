@@ -1,0 +1,35 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 400 300"
+  width="400"
+  height="300"
+>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="400" height="300" rx="16" fill="url(#bg)" />
+
+  <!-- Image Icon -->
+  <rect x="120" y="90" width="160" height="100" rx="8"
+        fill="none" stroke="#475569" stroke-width="3"/>
+
+  <circle cx="150" cy="120" r="8" fill="#475569"/>
+  <path d="M130 170l30-30 30 30 30-30 30 30"
+        fill="none" stroke="#475569" stroke-width="3"/>
+
+  <!-- Text -->
+  <text
+    x="200"
+    y="230"
+    text-anchor="middle"
+    fill="#64748b"
+    font-size="16"
+    font-family="system-ui, -apple-system, sans-serif"
+  >
+    No Image Available
+  </text>
+</svg>

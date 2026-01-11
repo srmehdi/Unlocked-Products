@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "productName": "Product 1",
+    "productSummary": "Product 1: One of the best product in this segment.",
+    "userRating": 4,
+    "totalUsersRated": 101,
+    "category": 1,
+    "editorReview": "Product 1: Tested for months. Excellent performance, but battery fades with heavy use.",
+    "editorRating": 4.5
+  },
+  {
+    "id": 2,
+    "productName": "Product 2",
+    "productSummary": "Product 2: One of the best product in this segment.",
+    "userRating": 4,
+    "totalUsersRated": 101,
+    "category": 1,
+    "editorReview": "Product 2: Tested for months. Excellent performance, but battery fades with heavy use.",
+    "editorRating": 4.5
+  },
+  {
+    "id": 3,
+    "productName": "Product 3",
+    "productSummary": "Product 3: One of the best product in this segment.",
+    "userRating": 4,
+    "totalUsersRated": 101,
+    "category": 1,
+    "editorReview": "Product 3: Tested for months. Excellent performance, but battery fades with heavy use.",
+    "editorRating": 4.5
+  },
+  {
+    "id": 4,
+    "productName": "Product 4",
+    "productSummary": "Product 4: One of the best product in this segment.",
+    "userRating": 4,
+    "totalUsersRated": 101,
+    "category": 1,
+    "editorReview": "Product 4: Tested for months. Excellent performance, but battery fades with heavy use.",
+    "editorRating": 4.5
+  },
+  {
+    "id": 5,
+    "productName": "Product 5",
+    "productSummary": "Product 5: One of the best product in this segment.",
+    "userRating": 4,
+    "totalUsersRated": 101,
+    "category": 1,
+    "editorReview": "Product 5: Tested for months. Excellent performance, but battery fades with heavy use.",
+    "editorRating": 4.5
+  },
+  {
+    "id": 6,
+    "productName": "Product 6",
+    "productSummary": "Product 6: One of the best product in this segment. Must buy product. I liked this product a lot. This is my go to product.",
+    "userRating": 4,
+    "totalUsersRated": 101,
+    "category": 1,
+    "editorReview": "Product 6: Tested for months. Excellent performance, but battery fades with heavy use.",
+    "editorRating": 4.5
+  }
+]

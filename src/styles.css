@@ -21,7 +21,19 @@
     font-size: var(--text-2xl);
   }
   h2 {
-    @apply font-medium;
+    font-size: var(--text-xl);
+  }
+  h3 {
+    font-size: var(--text-lg);
+  }
+  h4 {
+    font-size: var(--text-md);
+  }
+  h5 {
+    font-size: var(--text-sm);
+  }
+  h6 {
+    font-size: var(--text-xs);
   }
 }
 @layer components {
@@ -38,6 +50,25 @@
     /* @apply rounded-lg inset-ring inset-ring-white/10 bg-slate-900 border border-slate-800 py-20 px-6; */
     @apply rounded-lg shadow-xl bg-secondary-50 text-tertiary py-12 px-6;
   }
+  .filter-btn {
+    @apply px-4 py-2 rounded-lg text-sm font-medium
+         bg-slate-800 text-slate-300
+         hover:bg-slate-700 hover:text-white
+         transition;
+  }
+
+  .filter-btn.active {
+    @apply bg-sky-500 text-white;
+  }
+  .dropdown-item {
+    @apply w-full text-left px-4 py-2 text-sm
+         text-slate-300 hover:bg-slate-800
+         transition;
+  }
+
+  .dropdown-item.active {
+    @apply bg-sky-500 text-white;
+  }
 }
 
 /* Reset some default browser styles */
@@ -47,7 +78,7 @@
 } */
 
 .main-container {
-  max-width: 1200px;
+  max-width: 1180px;
   margin: auto;
 }
 

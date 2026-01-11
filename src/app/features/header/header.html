@@ -5,9 +5,9 @@
     >
       <nav class="">
         <div class="mx-auto">
-          <div class="flex items-center text-xl font-medium">
-            <div class="md:hidden">
-              <button (click)="toggleMenu()" class="text-gray-700">
+          <div class="flex items-center text-xl font-medium justify-between">
+            <div class="lg:hidden">
+              <button (click)="toggleMenu()" class="text-beige-darker">
                 <svg
                   class="w-10 h-10"
                   fill="none"
@@ -24,7 +24,7 @@
                 </svg>
               </button>
             </div>
-            <div class="shrink-0 max-md:w-full max-md:flex max-md:justify-center">
+            <div class="max-md:flex max-md:justify-center">
               <a routerLink="/dashboard/employee" class="">
                 <img
                   src="./../../../assets/images/logo.svg"
@@ -33,49 +33,106 @@
                 />
               </a>
             </div>
-            <div class="hidden md:flex items-center">
+            <div class="hidden lg:flex items-center">
               <a
                 routerLink="/dashboard/employee"
-                routerLinkActive="bg-white rounded hover:text-gray-700! text-chestnut!"
+                routerLinkActive="bg-beige-lighter rounded hover:text-gray-700! text-chestnut!"
                 class="hover:text-sky-400 transition duration-300 py-4 px-12"
                 >Home</a
               >
               <a
                 routerLink="/dashboard/about"
-                routerLinkActive="bg-white rounded hover:text-gray-700! text-chestnut!"
+                routerLinkActive="bg-beige rounded hover:text-gray-700! text-chestnut!"
                 class="hover:text-sky-400 transition duration-300 py-4 px-12"
                 >About</a
               >
               <a
                 routerLink="/dashboard/contact"
-                routerLinkActive="bg-white rounded hover:text-gray-700! text-chestnut!"
+                routerLinkActive="bg-beige-darker rounded hover:text-gray-700! text-chestnut!"
                 class="hover:text-sky-400 transition duration-300 py-4 px-12"
                 >Contact</a
               >
+              @if(user()?.role?.includes(roles.ADMIN)){
+              <a
+                routerLink="/dashboard/add-product"
+                routerLinkActive="bg-beige-darker rounded hover:text-gray-700! text-chestnut!"
+                class="hover:text-sky-400 transition duration-300 py-4 px-12"
+                >Add Product</a
+              >
+              }
             </div>
+            <div class="">
+              <button
+                class="w-13 h-13 rounded-full bg-beige-darker flex items-center justify-center text-tertiary hover:text-white hover:bg-sky-400 transition"
+                aria-label="User profile"
+              >
+                <svg
+                  class="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
+                </svg>
+              </button>
+            </div>
+            <!-- <div class="ml-auto max-md:absolute max-md:right-2">
+              <button
+                class="w-13 h-13 rounded-full bg-beige-darker flex items-center justify-center text-tertiary hover:text-white hover:bg-sky-400 transition"
+                aria-label="User profile"
+              >
+                <svg
+                  class="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
+                </svg>
+              </button>
+            </div> -->
           </div>
-          <div [class.hidden]="!isMenuOpen" class="md:hidden pb-4 font-medium">
+          <div [class.hidden]="!isMenuOpen" class="lg:hidden pb-4 font-medium">
             <a
               routerLink="/dashboard/employee"
               routerLinkActive="bg-white rounded hover:text-gray-700! text-chestnut!"
-              class="block px-2 py-2 text-gray-700"
+              class="block px-2 py-2"
               (click)="isMenuOpen = false"
               >Home</a
             >
             <a
               routerLink="/dashboard/about"
               routerLinkActive="bg-white rounded hover:text-gray-700! text-chestnut!"
-              class="block px-2 py-2 text-gray-700"
+              class="block px-2 py-2"
               (click)="isMenuOpen = false"
               >About</a
             >
             <a
               routerLink="/dashboard/contact"
               routerLinkActive="bg-white rounded hover:text-gray-700! text-chestnut!"
-              class="block px-2 py-2 text-gray-700"
+              class="block px-2 py-2"
               (click)="isMenuOpen = false"
               >Contact</a
             >
+            @if(user()?.role?.includes(roles.ADMIN)){
+            <a
+              routerLink="/dashboard/add-product"
+              routerLinkActive="bg-white rounded hover:text-gray-700! text-chestnut!"
+              class="block px-2 py-2"
+              (click)="isMenuOpen = false"
+              >Add Product</a
+            >
+            }
           </div>
         </div>
       </nav>

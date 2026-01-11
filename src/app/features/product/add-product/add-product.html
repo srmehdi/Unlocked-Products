@@ -1,0 +1,108 @@
+<section class="card">
+  <div class="max-w-5xl mx-auto space-y-12">
+    <h1 class="text-4xl font-bold mb-6 text-shadow-lg">Add New Product</h1>
+
+    <form
+      [formGroup]="addProductForm"
+      (ngSubmit)="onSubmit()"
+      class="space-y-6 bg-secondary-50 shadow-amber-950 shadow-2xl rounded-xl p-8"
+    >
+      <div>
+        <label class="block text-tertiary font-medium mb-1">
+          Product Name <span class="text-red-500">*</span></label
+        >
+        <input
+          formControlName="productName"
+          placeholder="e.g. iPhone 17 Pro"
+          class="w-full rounded-lg bg-white border px-4 py-3 text-tertiary placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500"
+        />
+      </div>
+      <div>
+        <label class="block text-tertiary font-medium mb-1">
+          Product Summary <span class="text-red-500">*</span></label
+        >
+        <textarea
+          formControlName="productSummary"
+          rows="2"
+          placeholder="Short overview shown on listings"
+          class="w-full rounded-lg bg-white border px-4 py-3 text-tertiary placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500"
+        ></textarea>
+      </div>
+      <div>
+        <label class="block text-tertiary font-medium mb-1">
+          Editor Review <span class="text-red-500">*</span></label
+        >
+        <textarea
+          formControlName="editorReview"
+          rows="4"
+          placeholder="Detailed hands-on editor review"
+          class="w-full rounded-lg bg-white border px-4 py-3 text-tertiary placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500"
+        ></textarea>
+      </div>
+      <div>
+        <label class="block text-tertiary font-medium mb-1">
+          Editor Rating <span class="text-red-500">*</span></label
+        >
+        <input
+          type="number"
+          min="1"
+          max="5"
+          step="0.1"
+          formControlName="editorRating"
+          class="w-full rounded-lg bg-white border px-4 py-3 text-tertiary placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500"
+        />
+      </div>
+      <div>
+        <label class="block text-tertiary font-medium mb-1">
+          Product Images <span class="text-red-500">*</span></label
+        >
+
+        <input
+          #fileInput
+          type="file"
+          accept="image/*"
+          multiple
+          (change)="onImagesUpload($event)"
+          class="hidden"
+        />
+        <button
+          type="button"
+          (click)="fileInput.click()"
+          class="px-4 py-2 rounded-lg text-sm bg-tertiary text-slate-100 hover:bg-sky-600 hover:text-slate-100 hover:cursor-pointer transition"
+        >
+          Upload Images
+        </button>
+        <p class="text-xs text-slate-500 mt-2">
+          You can upload multiple images. PNG, JPG recommended and file size should be less than 200
+          Kb.
+        </p>
+        <div *ngIf="images().length" class="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-4">
+          <div *ngFor="let img of images(); let i = index" class="relative group">
+            <img
+              [src]="img"
+              class="h-48 w-full object-contain rounded-lg border border-slate-800"
+            />
+            <button
+              type="button"
+              (click)="removeImage(i)"
+              class="absolute top-1 right-1 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 text-xs opacity-100 group-hover:opacity-100 hover:cursor-pointer transition"
+              aria-label="Remove image"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-end">
+        <button
+          type="submit"
+          class="bg-tertiary enabled:hover:bg-sky-600 text-slate-100 font-semibold px-5 py-3 rounded-lg ml-0 transition disabled:opacity-50 disabled:cursor-not-allowed max-md:w-full"
+        >
+          Publish Product
+        </button>
+      </div>
+    </form>
+  </div>
+</section>
+<app-status-modal #modal />
