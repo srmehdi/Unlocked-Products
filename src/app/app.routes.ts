@@ -9,6 +9,10 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
   {
+    path: 'login',
+    component: Login,
+  },
+  {
     path: 'dashboard',
     canActivate: [roleGuard],
     // canActivateChild: [roleGuard],

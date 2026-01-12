@@ -48,7 +48,7 @@ export class AddProduct {
     const input = event.target as HTMLInputElement;
     const files = Array.from(input.files || []);
 
-    if (this.images().length >= MAX_FILES) {
+    if (this.images().length + files.length > MAX_FILES) {
       this.modal.showError({
         message: `Maximum ${MAX_FILES} images are allowed to upload.`,
       });
