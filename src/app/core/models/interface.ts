@@ -35,3 +35,8 @@ export interface ProductPayload {
   editorRating: number;
   imageBase64: string[];
 }
+export interface HttpResponse<T> {
+  hasError: boolean;
+  businessMessage: string;
+  data: T;
+}

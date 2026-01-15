@@ -17,46 +17,9 @@ export class EmployeeDashboard {
   @ViewChild('modal') modal!: StatusModal;
   showSpinner = signal<boolean>(false);
 
-  // products = signal([
-  //     {
-  //       name: 'Product Alpha',
-  //       rating: 4.9,
-  //       stars: '★★★★★',
-  //       image: 'assets/images/logo.svg'
-  //     },
-  //     {
-  //       name: 'Product Beta',
-  //       rating: 4.7,
-  //       stars: '★★★★☆',
-  //       image: 'assets/images/logo.svg'
-  //     },
-  //     {
-  //       name: 'Product Gamma',
-  //       rating: 4.6,
-  //       stars: '★★★★☆',
-  //       image: 'assets/images/logo.svg'
-  //     },
-  //     {
-  //       name: 'Product Delta',
-  //       rating: 4.5,
-  //       stars: '★★★★☆',
-  //       image: 'assets/images/logo.svg'
-  //     },
-  //     {
-  //       name: 'Product Omega',
-  //       rating: 4.4,
-  //       stars: '★★★★☆',
-  //       image: 'assets/images/logo.svg'
-  //     }
-  //   ]);
-
   activeIndex = signal(0);
 
-  constructor(
-    private storoge: Storage,
-    private http: Http,
-    private router: Router // private state: State
-  ) {
+  constructor(private http: Http, private router: Router) {
     setInterval(() => {
       this.next();
     }, 4000);
@@ -70,11 +33,7 @@ export class EmployeeDashboard {
   }
   state = inject(State);
   user = this.state.user();
-  ngOnInit() {
-    // this.user = this.storoge.getUser();
-    // this.user = this.state.user;
-    // this.getProducts(1);
-  }
+  ngOnInit() {}
   ngAfterViewInit() {
     if (!(this.state.products()!?.length > 0)) {
       this.getProducts(1);
@@ -87,7 +46,6 @@ export class EmployeeDashboard {
   // products = this.state.products();
 
   getProducts(category: number) {
-    // this.showSpinner.set(true);
     this.modal.showLoading();
     const $destroyed: Subject<void> = new Subject();
     const payload = {

@@ -13,6 +13,20 @@ export const routes: Routes = [
     component: Login,
   },
   {
+    path: 'register',
+    loadComponent: () => import('./features/register/register').then((c) => c.Register),
+  },
+  {
+    path: 'forgot-password',
+    loadComponent: () =>
+      import('./features/forgot-password/forgot-password').then((c) => c.ForgotPassword),
+  },
+  {
+    path: 'reset-password',
+    loadComponent: () =>
+      import('./features/reset-password/reset-password').then((c) => c.ResetPassword),
+  },
+  {
     path: 'dashboard',
     canActivate: [roleGuard],
     // canActivateChild: [roleGuard],

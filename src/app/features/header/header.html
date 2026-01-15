@@ -83,45 +83,15 @@
               </button>
               @if (popupOpen()) {
               <div class="absolute right-0 mt-1 w-44 rounded-md bg-secondary-50 shadow-xl z-50">
-                <!-- <a
-                  routerLink=""
-                  class="px-4 py-2 text-[16px] md:text-lg text-tertiary hover:text-sky-400 transition"
-                  (click)="closePopup()"
-                >
-                  My Reviews
-                </a>
-
-                <div class="border-t border-beige-light"></div> -->
-
                 <button
                   (click)="logout()"
-                  class="px-4 py-2 text-[16px] md:text-lg hover:bg-beige-light transition cursor-pointer text-red-700 hover:text-red-900 w-full text-left"
+                  class="px-6 py-4 text-[16px] md:text-lg hover:bg-beige-light transition cursor-pointer text-red-700 hover:text-red-900 w-full text-left"
                 >
                   Logout
                 </button>
               </div>
               }
             </div>
-            <!-- <div class="ml-auto max-md:absolute max-md:right-2">
-              <button
-                class="w-13 h-13 rounded-full bg-beige-darker flex items-center justify-center text-tertiary hover:text-white hover:bg-sky-400 transition"
-                aria-label="User profile"
-              >
-                <svg
-                  class="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                </svg>
-              </button>
-            </div> -->
           </div>
           <div [class.hidden]="!isMenuOpen" class="lg:hidden pb-4 font-medium">
             <a

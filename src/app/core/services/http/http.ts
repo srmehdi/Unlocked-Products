@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Product, ProductPayload, User } from '../../models/interface';
+import { HttpResponse, Product, ProductPayload, User } from '../../models/interface';
 
 @Injectable({ providedIn: 'root' })
 export class Http {
   constructor(private http: HttpClient) {}
 
-  getUserByEmail(email: string): Observable<User[]> {
-    return this.http.get<User[]>(`/api/user?email=${encodeURIComponent(email)}`);
+  getUser(payload: User): Observable<HttpResponse<User[]>> {
+    return this.http.post<HttpResponse<User[]>>('/api/user', payload);
+    // return this.http.get<User[]>(`/api/user?email=${encodeURIComponent(email)}`);
     // return this.http.get<User[]>('./assets/jsons/user.json');
   }
 
@@ -22,6 +23,18 @@ export class Http {
   }
   addProducts(product: ProductPayload) {
     return this.http.post<any>('/api/addProduct', product);
+    // return this.http.get<Product>('./assets/jsons/products.json');
+  }
+  sendResetMail(payload: {}) {
+    return this.http.post<any>('/api/send-reset', payload);
+    // return this.http.get<Product>('./assets/jsons/products.json');
+  }
+  resetPassword(payload: {
+    token: string | null;
+    userId: string | null;
+    newPassword: string | null | undefined;
+  }) {
+    return this.http.post<any>('/api/reset-password', payload);
     // return this.http.get<Product>('./assets/jsons/products.json');
   }
 }
