@@ -14,7 +14,6 @@ function sanitizeConnectionString(conn) {
 
 const connectionString = sanitizeConnectionString(process.env.DATABASE_URL);
 
-// Create a pool outside the handler to reuse between invocations
 const pool = new Pool({
   connectionString,
   ssl: { rejectUnauthorized: false },

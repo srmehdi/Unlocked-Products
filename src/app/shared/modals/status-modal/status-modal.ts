@@ -46,6 +46,5 @@ export class StatusModal {
 
   retry() {
     this.showLoading();
-    // emit retry event or call service
   }
 }
