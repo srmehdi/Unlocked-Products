@@ -32,6 +32,7 @@ export class Header {
 
   logout() {
     this.storage.clearStorage();
+    this.state.resetUser();
     this.closePopup();
     this.router.navigate(['/login']);
   }

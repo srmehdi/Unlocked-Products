@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, DOCUMENT, effect, inject, signal } from '@angular/core';
 
 type ModalState = 'loading' | 'success' | 'error' | null;
 
@@ -13,7 +13,16 @@ export class StatusModal {
   title = signal('');
   message = signal('');
   callBackFunction!: Function | null;
-
+  private document = inject(DOCUMENT);
+  constructor() {
+    effect(() => {
+      if (this.state()) {
+        this.document.body.classList.add('overflow-hidden');
+      } else {
+        this.document.body.classList.remove('overflow-hidden');
+      }
+    });
+  }
   showLoading(message = 'Please wait. This might take sometime.') {
     this.state.set('loading');
     this.title.set('Loading...');
