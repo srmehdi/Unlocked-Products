@@ -70,7 +70,7 @@ export class Login implements OnInit {
 
             this.state.setUser(user);
             this.modal.close();
-            this.router.navigateByUrl('dashboard/employee');
+            this.router.navigateByUrl('/');
           } else {
             this.modal.showError({
               message: resp?.businessMessage,

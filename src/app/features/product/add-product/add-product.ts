@@ -105,7 +105,7 @@ export class AddProduct {
                   this.storage.removeProduct();
                   this.state.setProduct([]);
                 }
-                this.router.navigateByUrl('dashboard/employee');
+                this.router.navigateByUrl('/');
               },
             });
           } else {

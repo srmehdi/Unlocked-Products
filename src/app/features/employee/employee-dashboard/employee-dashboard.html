@@ -1,8 +1,8 @@
 <section class="card">
   <div class="max-w-5xl mx-auto space-y-12">
-    <h1 class="text-4xl font-bold mb-6 border-b-2 pb-6 text-shadow-lg">
+    <!-- <h1 class="text-4xl font-bold mb-6 border-b-2 pb-6 text-shadow-lg">
       <span class="text-sky-400">Welcome, </span>{{ user?.name }}
-    </h1>
+    </h1> -->
     <h2 class="text-3xl font-bold mb-10 text-center text-shadow-lg">Top Rated Products</h2>
 
     @if (products().length>0) {
@@ -17,13 +17,13 @@
           @if(product?.imageBase64?.length){
           <img
             [src]="product?.imageBase64?.[0]"
-            class="h-100 w-full object-cover rounded-lg mb-4"
+            class="max-h-[48vh] w-full object-contain rounded-lg mb-4 bg-black"
           />
           } @else {
           <img
             src="./../../../../assets/images/placeholder_product_dark.svg"
             alt="No image"
-            class="h-100 w-full object-cover rounded-lg mb-4"
+            class="max-h-[60vh] w-full object-contain rounded-lg mb-4 bg-black"
           />
           }
           <h1 class="text-2xl font-bold text-tertiary">
@@ -66,7 +66,10 @@
         (click)="navigateToProductPage(product)"
       >
         @if(product?.imageBase64?.length){
-        <img [src]="product?.imageBase64?.[0]" class="h-48 w-full object-cover rounded-lg mb-4" />
+        <img
+          [src]="product?.imageBase64?.[0]"
+          class="h-[48vh] w-full object-contain rounded-lg mb-4 bg-black"
+        />
         } @else {
         <img
           src="./../../../../assets/images/placeholder_product_dark.svg"

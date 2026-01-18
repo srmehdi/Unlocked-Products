@@ -20,7 +20,8 @@ export interface Product {
 
 export interface Experience {
   id: number;
-  user: string;
+  userId: number;
+  userName: string;
   rating: any;
   comment: string;
   monthsUsed: any;
@@ -34,6 +35,14 @@ export interface ProductPayload {
   editorReview: string;
   editorRating: number;
   imageBase64: string[];
+}
+export interface ProductExperience {
+  id?: number;
+  productId: number;
+  userId: number;
+  comment: string;
+  monthsUsed: number;
+  rating: number;
 }
 export interface HttpResponse<T> {
   hasError: boolean;

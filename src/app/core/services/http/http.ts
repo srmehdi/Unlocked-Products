@@ -1,7 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { HttpResponse, Product, ProductPayload, User } from '../../models/interface';
+import {
+  HttpResponse,
+  Product,
+  ProductExperience,
+  ProductPayload,
+  User,
+} from '../../models/interface';
 
 @Injectable({ providedIn: 'root' })
 export class Http {
@@ -36,5 +42,13 @@ export class Http {
   }) {
     return this.http.post<any>('/api/reset-password', payload);
     // return this.http.get<Product>('./assets/jsons/products.json');
+  }
+  submitExperience(experience: ProductExperience) {
+    return this.http.post<any>('/api/submit-experience', experience);
+    // return this.http.get<User>('./assets/jsons/user.json');
+  }
+  fetchExperiences(productId: { productId: number }) {
+    return this.http.post<any>('/api/get-experiences', productId);
+    // return this.http.get<User>('./assets/jsons/user.json');
   }
 }

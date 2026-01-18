@@ -1,39 +1,18 @@
 import { Routes } from '@angular/router';
 import { Login } from './features/login/login';
 import { roleGuard } from './core/guards/role-guard/role-guard';
+import { Dashboard } from './features/dashboard/dashboard';
+import { NotFound } from './features/not-found/not-found';
 
 export const routes: Routes = [
   {
     path: '',
-    component: Login,
-    pathMatch: 'full',
-  },
-  {
-    path: 'login',
-    component: Login,
-  },
-  {
-    path: 'register',
-    loadComponent: () => import('./features/register/register').then((c) => c.Register),
-  },
-  {
-    path: 'forgot-password',
-    loadComponent: () =>
-      import('./features/forgot-password/forgot-password').then((c) => c.ForgotPassword),
-  },
-  {
-    path: 'reset-password',
-    loadComponent: () =>
-      import('./features/reset-password/reset-password').then((c) => c.ResetPassword),
-  },
-  {
-    path: 'dashboard',
-    canActivate: [roleGuard],
+    // canActivate: [roleGuard],
     // canActivateChild: [roleGuard],
     loadComponent: () => import('./features/dashboard/dashboard').then((c) => c.Dashboard),
     children: [
       {
-        path: 'employee',
+        path: '',
         children: [
           {
             path: '',
@@ -62,10 +41,29 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/product/product-detail/product-detail').then((c) => c.ProductDetail),
       },
+      {
+        path: 'login',
+        component: Login,
+      },
+      {
+        path: 'register',
+        loadComponent: () => import('./features/register/register').then((c) => c.Register),
+      },
+      {
+        path: 'forgot-password',
+        loadComponent: () =>
+          import('./features/forgot-password/forgot-password').then((c) => c.ForgotPassword),
+      },
+      { path: 'not-found', component: NotFound },
     ],
   },
   {
+    path: 'reset-password',
+    loadComponent: () =>
+      import('./features/reset-password/reset-password').then((c) => c.ResetPassword),
+  },
+  {
     path: '**',
-    component: Login,
+    redirectTo: 'not-found',
   },
 ];

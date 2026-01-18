@@ -2,7 +2,10 @@
   <div class="max-w-5xl mx-auto space-y-12">
     <section class="grid md:grid-cols-2 gap-8">
       @if(product()?.imageBase64?.length){
-      <img [src]="product()?.imageBase64?.[0]" class="h-60 w-full object-cover rounded-lg mb-4" />
+      <img
+        [src]="product()?.imageBase64?.[0]"
+        class="h-[48vh] w-full object-contain rounded-lg mb-4 bg-black"
+      />
       } @else {
       <img
         src="./../../../../assets/images/placeholder_product_dark.svg"
@@ -75,13 +78,19 @@
     </div>
 
     <section class="space-y-6">
+      @if(sortedExperiences().length > 0){
       <div
         *ngFor="let exp of sortedExperiences()"
         class="bg-slate-500 p-5 shadow-amber-950 shadow-xl rounded-xl"
       >
         <div class="flex justify-between mb-1">
-          <span class="text-slate-100 font-medium">{{ exp.user }}</span>
-          <span class="text-yellow-400">{{ exp.rating }} ★</span>
+          <span class="text-slate-100 font-medium pr-2">{{ exp.userName }}</span>
+          <span class="flex justify-between">
+            <span class="text-slate-100 font-medium pr-2 sm:pr-8"
+              >({{ formatTimeAgo(exp.createdAt.toString()) }})</span
+            >
+            <span class="text-yellow-400">{{ exp.rating }} ★</span>
+          </span>
         </div>
 
         <p class="text-slate-300 mb-3">
@@ -101,56 +110,100 @@
           </div>
         </div>
       </div>
+      } @else {
+      <div class="text-lg text-center">Be the first to share your experience.</div>
+      }
     </section>
-
-    <section>
-      <h2 class="text-xl font-semibold text-tertiary mb-4">Share Your Experience</h2>
-
-      <form
-        class="p-6 space-y-4 bg-secondary-50 shadow-amber-950 shadow-2xl rounded-xl"
-        (ngSubmit)="submitExperience()"
+    <section class="card">
+      <div
+        class="w-full max-w-xl mx-auto bg-secondary-50 shadow-amber-950 shadow-2xl rounded-xl p-8"
       >
-        <input
-          [(ngModel)]="newExperience.user"
-          name="user"
-          required
-          placeholder="Your name"
-          class="w-full rounded-lg bg-white border px-4 py-3 text-tertiary placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500"
-        />
+        <h2 class="text-3xl font-bold text-center mb-6 text-secondary-100">
+          Share Your Experience
+        </h2>
+        @if (user()?.name) {
 
-        <textarea
-          [(ngModel)]="newExperience.comment"
-          name="comment"
-          required
-          placeholder="Your real-world experience"
-          class="w-full rounded-lg bg-white border px-4 py-3 text-tertiary placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500"
-        ></textarea>
+        <form [formGroup]="experienceForm" (ngSubmit)="submitExperience()" class="space-y-5">
+          <div>
+            <label class="block text-sm text-secondary-100 font-medium mb-2">
+              Your Experience
+            </label>
+            <textarea
+              formControlName="comment"
+              placeholder="Describe your real-world experience"
+              class="w-full rounded-lg bg-white border px-4 py-3 text-tertiary placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500"
+            ></textarea>
+            <p *ngIf="comment.invalid && comment.touched" class="text-sm text-red-600 mt-1">
+              Experience is required.
+            </p>
+          </div>
+          <div>
+            <label class="block text-sm text-secondary-100 font-medium mb-2"> Months Used </label>
+            <input
+              type="number"
+              min="1"
+              step="1"
+              formControlName="monthsUsed"
+              placeholder="e.g. 6"
+              inputmode="numeric"
+              (keydown)="blockDecimal($event)"
+              class="w-full rounded-lg bg-white border px-4 py-3 text-tertiary placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500"
+            />
+            <p *ngIf="monthsUsed.invalid && monthsUsed.touched" class="text-sm text-red-600 mt-1">
+              Please add valid months used. Minimum: 1 month and Maximum: 120 months.
+            </p>
+          </div>
+          <div>
+            <label class="block text-sm text-secondary-100 font-medium mb-2"> Rating </label>
 
-        <input
-          type="number"
-          min="1"
-          [(ngModel)]="newExperience.monthsUsed"
-          name="monthsUsed"
-          placeholder="Months used"
-          class="w-full rounded-lg bg-white border px-4 py-3 text-tertiary placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500"
-        />
-        <input
-          type="number"
-          min="1"
-          [(ngModel)]="newExperience.rating"
-          name="rating"
-          placeholder="Your rating"
-          class="w-full rounded-lg bg-white border px-4 py-3 text-tertiary placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500"
-        />
+            <div class="flex items-center gap-2">
+              <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
+                <svg
+                  (click)="setRating(star)"
+                  (mouseenter)="hoveredStar = star"
+                  (mouseleave)="hoveredStar = 0"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  class="w-8 h-8 cursor-pointer transition"
+                  [class.text-yellow-400]="star <= (hoveredStar || rating.value)"
+                  [class.text-slate-400]="star > (hoveredStar || rating.value)"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
+                  />
+                </svg>
+              </ng-container>
+            </div>
 
-        <div class="flex justify-end">
+            <p *ngIf="rating.invalid && rating.touched" class="text-sm text-red-600 mt-1">
+              Please select a rating.
+            </p>
+          </div>
           <button
-            class="bg-tertiary enabled:hover:bg-sky-600 text-slate-100 font-semibold rounded-lg px-6 py-3 transition disabled:opacity-50 disabled:cursor-not-allowed max-md:w-full"
+            type="submit"
+            [disabled]="experienceForm.invalid"
+            class="w-full bg-tertiary enabled:hover:bg-sky-600 text-slate-100 font-semibold rounded-lg py-3 transition cursor-not-allowed disabled:opacity-50 enabled:cursor-pointer"
           >
             Submit Experience
           </button>
+        </form>
+
+        } @else {
+        <div class="space-y-6 text-center">
+          <p class="text-tertiary">You need to be logged in to submit your experience.</p>
+
+          <button
+            (click)="goToLogin()"
+            class="w-full bg-tertiary hover:bg-sky-600 text-slate-100 font-semibold rounded-lg py-3 transition cursor-pointer"
+          >
+            Login First
+          </button>
         </div>
-      </form>
+
+        }
+      </div>
     </section>
   </div>
 </section>
+<app-status-modal #modal />

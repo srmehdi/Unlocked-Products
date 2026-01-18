@@ -14,6 +14,9 @@ export class State {
     this.storage.setUser(user);
     this._user.set(user);
   }
+  resetUser() {
+    this._user.set(null);
+  }
   // private readonly _product = signal<Product | null>(this.storage.getProduct());
   // readonly product = this._product.asReadonly();
   // setProduct(product: Product) {

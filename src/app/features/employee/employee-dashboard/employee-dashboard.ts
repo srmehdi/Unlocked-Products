@@ -74,6 +74,6 @@ export class EmployeeDashboard {
   }
   navigateToProductPage(product: Product) {
     // this.state.setProduct(product);
-    this.router.navigateByUrl(`/dashboard/product/${product.id}`);
+    this.router.navigateByUrl(`/product/${product.id}`);
   }
 }
