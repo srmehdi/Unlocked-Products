@@ -1,4 +1,4 @@
-import { Component, signal, computed, inject, ViewChild } from '@angular/core';
+import { Component, signal, computed, inject, ViewChild, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
@@ -26,6 +26,7 @@ export class ProductDetail {
   product = signal<Product | null>(null);
 
   experiences = signal<Experience[]>([]);
+  experienceShared = signal<boolean>(false);
   user = this.state.user;
   monthsOptions = [1, 3, 6, 9, 12, 18, 24];
   hoveredStar = 0;
@@ -49,7 +50,23 @@ export class ProductDetail {
       event.preventDefault();
     }
   }
+  zoomImage = signal<string | null>(null);
 
+  openImageZoom(src: string | undefined) {
+    if (!src) return;
+    this.zoomImage.set(src);
+    document.body.style.overflow = 'hidden';
+  }
+  closeImageZoom() {
+    this.zoomImage.set(null);
+    document.body.style.overflow = '';
+  }
+  @HostListener('document:keydown.escape')
+  onEsc() {
+    if (this.zoomImage()) {
+      this.closeImageZoom();
+    }
+  }
   goToLogin() {
     this.router.navigate(['/login']);
   }
@@ -91,6 +108,12 @@ export class ProductDetail {
 
           if (resp?.length >= 0) {
             this.experiences.set(resp);
+            const sharedExperience = resp.filter((exp: { mail: string | undefined }) => {
+              return exp.mail === this.user()?.email;
+            });
+            sharedExperience.length > 0
+              ? this.experienceShared.set(true)
+              : this.experienceShared.set(false);
             this.modal.close();
           } else if (resp?.error) {
             this.modal.showError({
@@ -112,7 +135,7 @@ export class ProductDetail {
             // },
           });
         },
-      }
+      },
       //   (data) => {
 
       //   this.experiences.set(data);
@@ -147,14 +170,14 @@ export class ProductDetail {
         return list.sort((a, b) => b.helpful - b.notHelpful - (a.helpful - a.notHelpful));
       default:
         return list.sort(
-          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
         );
     }
   });
 
   vote(id: number, type: 'helpful' | 'notHelpful') {
     this.experiences.update((list) =>
-      list.map((exp) => (exp.id === id ? { ...exp, [type]: exp[type] + 1 } : exp))
+      list.map((exp) => (exp.id === id ? { ...exp, [type]: exp[type] + 1 } : exp)),
     );
   }
   formatTimeAgo(dateString: string): string {

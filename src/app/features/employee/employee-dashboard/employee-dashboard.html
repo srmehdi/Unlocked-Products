@@ -3,95 +3,143 @@
     <!-- <h1 class="text-4xl font-bold mb-6 border-b-2 pb-6 text-shadow-lg">
       <span class="text-sky-400">Welcome, </span>{{ user?.name }}
     </h1> -->
-    <h2 class="text-3xl font-bold mb-10 text-center text-shadow-lg">Top Rated Products</h2>
+    <h2
+      class="text-2xl font-bold text-center mb-4 text-tertiary tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.25)]"
+    >
+      Top Rated Products
+    </h2>
 
-    @if (products().length>0) {
-    <div class="relative overflow-hidden rounded-xl bg-beige-darker shadow-2xl mb-20">
+    @if (topProducts().length > 0) {
       <div
-        class="flex transition-transform duration-700 ease-in-out"
-        [style.width.%]="products().length * 100"
-        [style.transform]="'translateX(-' + activeIndex() * (100 / products().length) + '%)'"
+        class="relative overflow-hidden rounded-2xl bg-beige-darker shadow-[0_40px_80px_rgba(0,0,0,0.45)] border border-black/10"
       >
-        @for (product of products(); track $index) {
-        <div class="w-full p-8 text-center">
-          @if(product?.imageBase64?.length){
-          <img
-            [src]="product?.imageBase64?.[0]"
-            class="max-h-[48vh] w-full object-contain rounded-lg mb-4 bg-black"
-          />
-          } @else {
-          <img
-            src="./../../../../assets/images/placeholder_product_dark.svg"
-            alt="No image"
-            class="max-h-[60vh] w-full object-contain rounded-lg mb-4 bg-black"
-          />
+        <div
+          class="flex transition-transform duration-700 ease-[cubic-bezier(.4,0,.2,1)]"
+          [style.width.%]="topProducts().length * 100"
+          [style.transform]="'translateX(-' + activeIndex() * (100 / topProducts().length) + '%)'"
+        >
+          @for (product of topProducts(); track $index) {
+            <div
+              class="w-full p-10 text-center space-y-4 cursor-pointer"
+              (click)="navigateToProductPage(product)"
+            >
+              @if (product?.imageBase64?.length) {
+                <img
+                  [src]="product?.imageBase64?.[0]"
+                  class="max-h-[52vh] w-full object-contain rounded-2xl bg-black cursor-zoom-in shadow-[0_25px_60px_rgba(0,0,0,0.6)] hover:scale-[1.01] transition"
+                  (click)="openImageZoom($event, product?.imageBase64?.[0])"
+                />
+              } @else {
+                <img
+                  src="./../../../../assets/images/placeholder_product_dark.svg"
+                  class="max-h-[52vh] w-full object-contain rounded-2xl bg-black"
+                />
+              }
+              <h1 class="text-3xl font-bold text-tertiary tracking-wide">
+                {{ product.productName }}
+              </h1>
+
+              <p class="text-base font-medium text-tertiary/80">
+                {{ product.productSummary }}
+              </p>
+
+              <p class="text-sm leading-relaxed text-secondary-100 max-w-3xl mx-auto">
+                {{ product.editorReview }}
+              </p>
+
+              <div class="text-yellow-400 text-lg font-semibold">{{ product.editorRating }} ★</div>
+            </div>
           }
-          <h1 class="text-2xl font-bold text-tertiary">
-            {{ product.productName }}
-          </h1>
-
-          <h1 class="text-xl font-semibold text-tertiary mb-2">
-            {{ product?.productSummary }}
-          </h1>
-          <p class="text-lg leading-relaxed mb-4">
-            {{ product?.editorReview }}
-          </p>
-
-          <p class="text-slate-400 text-sm">{{ product.editorRating }} / 5</p>
         </div>
-        }
+        <div class="flex items-center justify-center gap-4 pb-6">
+          <button
+            (click)="toggleAutoPlay()"
+            class="h-10 w-10 rounded-full flex items-center justify-center bg-beige-lighter border border-black/10 shadow-lg hover:bg-tertiary hover:text-white transition cursor-pointer"
+            [attr.aria-label]="isPaused ? 'Play carousel' : 'Pause carousel'"
+          >
+            <span class="text-lg">
+              {{ isPaused ? '▶' : '❚❚' }}
+            </span>
+          </button>
+          <div class="flex gap-3">
+            @for (item of topProducts(); track $index) {
+              <button
+                (click)="goTo($index)"
+                class="dot"
+                [class.dot-active]="$index === activeIndex()"
+                aria-label="Go to slide"
+              ></button>
+            }
+          </div>
+        </div>
       </div>
-
-      <div class="flex justify-center gap-4 pb-6">
-        @for (item of products(); track $index) {
-        <button
-          (click)="goTo($index)"
-          class="dot"
-          [class.dot-active]="$index === activeIndex()"
-          aria-label="Go to slide"
-        ></button>
-        }
-      </div>
-    </div>
     } @else {
-    <div class="text-lg">No products available.</div>
+      <div class="text-lg text-center">No products available.</div>
     }
 
-    <h2 class="text-3xl font-bold text-tertiary mb-10 text-left text-shadow-lg">All Products</h2>
-    @if(products().length>0){
-    <div class="grid gap-8 md:grid-cols-3 mb-14">
-      @for (product of products(); track $index) {
-      <div
-        class="bg-beige-lighter shadow-2xl rounded-xl p-6 text-center cursor-pointer border border-beige-lighter hover:border-sky-500 transition"
-        (click)="navigateToProductPage(product)"
-      >
-        @if(product?.imageBase64?.length){
-        <img
-          [src]="product?.imageBase64?.[0]"
-          class="h-[48vh] w-full object-contain rounded-lg mb-4 bg-black"
-        />
-        } @else {
-        <img
-          src="./../../../../assets/images/placeholder_product_dark.svg"
-          alt="No image"
-          class="h-48 w-full object-cover rounded-lg mb-4"
-        />
+    <h2
+      class="text-2xl font-bold mb-6 text-tertiary tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.25)]"
+    >
+      All Products
+    </h2>
+    @if (products().length > 0) {
+      <div class="grid gap-8 md:grid-cols-3 mb-14">
+        @for (product of products(); track $index) {
+          <div
+            class="group bg-beige-lighter rounded-2xl p-6 text-center cursor-pointer border border-beige-lighter shadow-[0_20px_40px_rgba(0,0,0,0.25)] hover:shadow-[0_30px_70px_rgba(0,0,0,0.35)] hover:border-sky-500 hover:-translate-y-1 transition-all duration-300"
+            (click)="navigateToProductPage(product)"
+          >
+            @if (product?.imageBase64?.length) {
+              <img
+                [src]="product?.imageBase64?.[0]"
+                class="h-[40vh] w-full object-contain rounded-xl mb-5 bg-black cursor-zoom-in group-hover:scale-[1.02] transition"
+                (click)="openImageZoom($event, product?.imageBase64?.[0])"
+              />
+            } @else {
+              <img
+                src="./../../../../assets/images/placeholder_product_dark.svg"
+                class="h-48 w-full object-cover rounded-xl mb-5"
+              />
+            }
+
+            <h3 class="text-lg font-semibold text-tertiary mb-1">
+              {{ product.productName }}
+            </h3>
+
+            <p class="text-sm font-medium text-tertiary/70 mb-3">
+              {{ product.productSummary }}
+            </p>
+
+            <div class="text-yellow-400 text-base font-semibold">{{ product.editorRating }} ★</div>
+          </div>
         }
-        <h3 class="font-semibold mb-3">{{ product?.productName }}</h3>
-        <h5 class="font-semibold mb-3">{{ product?.productSummary }}</h5>
-        <!-- <div class="text-yellow-400 text-lg my-2">★★★★☆</div> -->
-        <!-- <p class="text-slate-400 text-sm">{{ product?.userRating }} / 5</p> -->
-        <p class="text-slate-400 text-sm">
-          <!-- {{ product?.userRating }} <span class="text-lg">★</span> ({{ product.totalUsersRated }}
-          reviews) -->
-          {{ product?.editorRating }} <span class="text-lg text-yellow-400">★</span>
-        </p>
       </div>
-      }
-    </div>
     } @else {
-    <div class="text-lg">No products available.</div>
+      <div class="text-lg">No products available.</div>
     }
   </div>
+  @if (zoomImage()) {
+    <div
+      class="fixed inset-0 z-[999] flex items-center justify-center bg-black/80 backdrop-blur-md"
+      (click)="closeImageZoom()"
+    >
+      <div
+        class="relative max-w-[90vw] max-h-[90vh] animate-[fadeIn_0.25s_ease-out]"
+        (click)="$event.stopPropagation()"
+      >
+        <button
+          class="absolute -top-10 right-0 text-white text-2xl hover:text-red-400 transition cursor-pointer"
+          (click)="closeImageZoom()"
+        >
+          ✕
+        </button>
+
+        <img
+          [src]="zoomImage()"
+          class="max-h-[85vh] max-w-[85vw] object-contain rounded-3xl shadow-[0_40px_120px_rgba(0,0,0,0.9)]"
+        />
+      </div>
+    </div>
+  }
 </section>
 <app-status-modal #modal />
