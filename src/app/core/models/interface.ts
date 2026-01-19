@@ -22,6 +22,7 @@ export interface Experience {
   id: number;
   userId: number;
   userName: string;
+  mail: string;
   rating: any;
   comment: string;
   monthsUsed: any;

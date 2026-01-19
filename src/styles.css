@@ -27,7 +27,7 @@
     font-size: var(--text-lg);
   }
   h4 {
-    font-size: var(--text-md);
+    font-size: var(--text-base);
   }
   h5 {
     font-size: var(--text-sm);
@@ -48,7 +48,7 @@
     /* @apply rounded-lg shadow-md ring-1 ring-slate-900/5 bg-gray-950 text-gray-200 py-20 px-6; */
     /* @apply rounded-lg shadow-md inset-ring inset-ring-white/10 bg-slate-900 border border-slate-800 text-gray-200 py-20 px-6; */
     /* @apply rounded-lg inset-ring inset-ring-white/10 bg-slate-900 border border-slate-800 py-20 px-6; */
-    @apply rounded-lg shadow-xl bg-secondary-50 text-tertiary py-12 px-6;
+    @apply rounded-lg shadow-xl bg-secondary-50 text-tertiary py-8 px-6;
   }
   .filter-btn {
     @apply px-4 py-2 rounded-lg text-sm font-medium
@@ -71,6 +71,16 @@
   }
 }
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
 /* Reset some default browser styles */
 /* * {
   margin: 0;

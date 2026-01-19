@@ -42,13 +42,14 @@ exports.handler = async (event) => {
         e.months_used AS "monthsUsed",
         e.created_at AS "createdAt",
         u.name AS "userName",
-        u.id AS "userId"
+        u.id AS "userId",
+        u.email AS "mail"
       FROM "experience" e
       JOIN "user" u ON u.id = e.user_id
       WHERE e.product_id = $1
       ORDER BY e.created_at DESC
       `,
-      [productId]
+      [productId],
     );
 
     return {

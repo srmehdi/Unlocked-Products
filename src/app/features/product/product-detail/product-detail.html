@@ -1,209 +1,254 @@
 <section class="card">
   <div class="max-w-5xl mx-auto space-y-12">
-    <section class="grid md:grid-cols-2 gap-8">
-      @if(product()?.imageBase64?.length){
-      <img
-        [src]="product()?.imageBase64?.[0]"
-        class="h-[48vh] w-full object-contain rounded-lg mb-4 bg-black"
-      />
-      } @else {
-      <img
-        src="./../../../../assets/images/placeholder_product_dark.svg"
-        alt="No image"
-        class="h-60 w-full object-cover rounded-lg mb-4"
-      />
-      }
-      <div>
-        <h1 class="text-3xl font-bold text-tertiary mb-2">
+    <section class="grid mb-4 md:grid-cols-2 gap-8">
+      <div class="relative rounded-2xl overflow-hidden bg-black shadow-xl">
+        @if (product()?.imageBase64?.length) {
+          <img
+            [src]="product()?.imageBase64?.[0]"
+            class="h-[52vh] w-full object-contain rounded-2xl bg-black cursor-zoom-in pointer-events-auto relative z-10 shadow-[0_25px_60px_rgba(0,0,0,0.6)] hover:scale-[1.01] transition"
+            (click)="openImageZoom(product()?.imageBase64?.[0])"
+          />
+        } @else {
+          <img
+            src="./../../../../assets/images/placeholder_product_dark.svg"
+            class="h-[52vh] w-full object-contain"
+          />
+        }
+
+        <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent"></div>
+      </div>
+
+      <div class="space-y-4">
+        <h1 class="text-3xl font-extrabold text-tertiary">
           {{ product()?.productName }}
         </h1>
-        <h1 class="text-xl font-bold text-tertiary mb-2">
+
+        <p class="text-base font-semibold text-slate-500">
           {{ product()?.productSummary }}
-        </h1>
-        <p class="text-lg leading-relaxed mb-4">
+        </p>
+
+        <p class="text-sm leading-relaxed text-slate-600">
           {{ product()?.editorReview }}
         </p>
       </div>
     </section>
 
     <section class="grid sm:grid-cols-2 gap-4">
-      <div class="bg-beige-lighter p-3 shadow-amber-950 shadow-lg rounded-xl text-center">
-        <p class="text-slate-500 text-sm">Editor Score</p>
-        <p class="text-3xl font-bold text-sky-400">{{ product()?.editorRating }} ★</p>
+      <div class="flex items-center justify-center gap-2 rounded-xl bg-beige-lighter p-4 shadow-lg">
+        <span class="text-sm font-semibold text-slate-500">Editor Score</span>
+        <span class="text-xl font-bold text-sky-500"> {{ product()?.editorRating }} ★ </span>
       </div>
 
-      <div class="bg-beige-darker p-3 shadow-amber-950 shadow-lg rounded-xl text-center">
-        <p class="text-slate-400 text-sm">User Score</p>
-        <p class="text-3xl font-bold text-yellow-400">{{ userScore() }} ★</p>
+      <div class="flex items-center justify-center gap-2 rounded-xl bg-beige-darker p-4 shadow-lg">
+        <span class="text-sm font-semibold text-slate-500">User Score</span>
+        <span class="text-xl font-bold text-yellow-400"> {{ userScore() }} ★ </span>
       </div>
     </section>
-    <div class="relative inline-block text-left">
-      <button
-        type="button"
-        (click)="isOpen.set(!isOpen())"
-        class="shadow-amber-950 shadow-lg rounded-xl flex items-center gap-2 px-4 py-2 bg-tertiary text-slate-300 hover:bg-slate-700 hover:text-white transition"
-      >
-        Sort: {{ sortLabel() }}
-        <span class="text-xl">▾</span>
-      </button>
 
-      <div
-        *ngIf="isOpen()"
-        class="absolute right-0 mt-2 w-45 rounded-lg bg-slate-900 border border-slate-800 shadow-lg z-10"
-      >
+    @if (sortedExperiences().length > 0) {
+      <div class="relative inline-block text-left">
         <button
-          class="dropdown-item"
-          [class.active]="sortBy() === 'recent'"
-          (click)="sortBy.set('recent'); isOpen.set(false)"
+          type="button"
+          (click)="isOpen.set(!isOpen())"
+          class="flex items-center gap-2 rounded-xl bg-tertiary px-4 py-2 text-slate-200 shadow-lg hover:bg-slate-700 transition cursor-pointer"
         >
-          Most Recent
+          Sort: {{ sortLabel() }}
+          <span class="text-lg">▾</span>
         </button>
 
-        <button
-          class="dropdown-item"
-          [class.active]="sortBy() === 'longest'"
-          (click)="sortBy.set('longest'); isOpen.set(false)"
+        <div
+          *ngIf="isOpen()"
+          class="absolute right-0 mt-2 w-45 rounded-xl bg-slate-900 border border-slate-800 shadow-xl z-10"
         >
-          Longest Use
-        </button>
+          <button
+            class="dropdown-item cursor-pointer"
+            [class.active]="sortBy() === 'recent'"
+            (click)="sortBy.set('recent'); isOpen.set(false)"
+          >
+            Most Recent
+          </button>
 
-        <button
-          class="dropdown-item"
-          [class.active]="sortBy() === 'helpful'"
-          (click)="sortBy.set('helpful'); isOpen.set(false)"
-        >
-          Most Helpful
-        </button>
+          <button
+            class="dropdown-item cursor-pointer"
+            [class.active]="sortBy() === 'longest'"
+            (click)="sortBy.set('longest'); isOpen.set(false)"
+          >
+            Longest Use
+          </button>
+
+          <button
+            class="dropdown-item cursor-pointer"
+            [class.active]="sortBy() === 'helpful'"
+            (click)="sortBy.set('helpful'); isOpen.set(false)"
+          >
+            Most Helpful
+          </button>
+        </div>
       </div>
-    </div>
+    }
 
     <section class="space-y-6">
-      @if(sortedExperiences().length > 0){
-      <div
-        *ngFor="let exp of sortedExperiences()"
-        class="bg-slate-500 p-5 shadow-amber-950 shadow-xl rounded-xl"
-      >
-        <div class="flex justify-between mb-1">
-          <span class="text-slate-100 font-medium pr-2">{{ exp.userName }}</span>
-          <span class="flex justify-between">
-            <span class="text-slate-100 font-medium pr-2 sm:pr-8"
-              >({{ formatTimeAgo(exp.createdAt.toString()) }})</span
-            >
-            <span class="text-yellow-400">{{ exp.rating }} ★</span>
-          </span>
-        </div>
+      @if (sortedExperiences().length > 0) {
+        <div class="grid lg:grid-cols-2 gap-4">
+          <div
+            *ngFor="let exp of sortedExperiences()"
+            class="rounded-2xl bg-slate-600/90 p-5 shadow-xl hover:shadow-2xl transition"
+          >
+            <div class="flex justify-between items-start mb-2">
+              <div>
+                <p class="text-slate-100 font-semibold">
+                  {{ exp.userName }}
+                  <span class="text-xs text-slate-300"> ({{ exp.mail }}) </span>
+                </p>
+                <p class="text-xs text-slate-300">
+                  {{ formatTimeAgo(exp.createdAt.toString()) }}
+                </p>
+              </div>
 
-        <p class="text-slate-300 mb-3">
-          {{ exp.comment }}
-        </p>
-
-        <div class="flex justify-between items-center text-sm text-slate-950">
-          <span>Used for {{ exp.monthsUsed }} months</span>
-
-          <div class="flex gap-4">
-            <button class="hover:text-green-400" (click)="vote(exp.id, 'helpful')">
-              👍 Helpful ({{ exp.helpful }})
-            </button>
-            <button class="hover:text-red-400" (click)="vote(exp.id, 'notHelpful')">
-              👎 Not Helpful ({{ exp.notHelpful }})
-            </button>
-          </div>
-        </div>
-      </div>
-      } @else {
-      <div class="text-lg text-center">Be the first to share your experience.</div>
-      }
-    </section>
-    <section class="card">
-      <div
-        class="w-full max-w-xl mx-auto bg-secondary-50 shadow-amber-950 shadow-2xl rounded-xl p-8"
-      >
-        <h2 class="text-3xl font-bold text-center mb-6 text-secondary-100">
-          Share Your Experience
-        </h2>
-        @if (user()?.name) {
-
-        <form [formGroup]="experienceForm" (ngSubmit)="submitExperience()" class="space-y-5">
-          <div>
-            <label class="block text-sm text-secondary-100 font-medium mb-2">
-              Your Experience
-            </label>
-            <textarea
-              formControlName="comment"
-              placeholder="Describe your real-world experience"
-              class="w-full rounded-lg bg-white border px-4 py-3 text-tertiary placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500"
-            ></textarea>
-            <p *ngIf="comment.invalid && comment.touched" class="text-sm text-red-600 mt-1">
-              Experience is required.
-            </p>
-          </div>
-          <div>
-            <label class="block text-sm text-secondary-100 font-medium mb-2"> Months Used </label>
-            <input
-              type="number"
-              min="1"
-              step="1"
-              formControlName="monthsUsed"
-              placeholder="e.g. 6"
-              inputmode="numeric"
-              (keydown)="blockDecimal($event)"
-              class="w-full rounded-lg bg-white border px-4 py-3 text-tertiary placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500"
-            />
-            <p *ngIf="monthsUsed.invalid && monthsUsed.touched" class="text-sm text-red-600 mt-1">
-              Please add valid months used. Minimum: 1 month and Maximum: 120 months.
-            </p>
-          </div>
-          <div>
-            <label class="block text-sm text-secondary-100 font-medium mb-2"> Rating </label>
-
-            <div class="flex items-center gap-2">
-              <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
-                <svg
-                  (click)="setRating(star)"
-                  (mouseenter)="hoveredStar = star"
-                  (mouseleave)="hoveredStar = 0"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  class="w-8 h-8 cursor-pointer transition"
-                  [class.text-yellow-400]="star <= (hoveredStar || rating.value)"
-                  [class.text-slate-400]="star > (hoveredStar || rating.value)"
-                  fill="currentColor"
-                >
-                  <path
-                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
-                  />
-                </svg>
-              </ng-container>
+              <span class="flex items-center gap-1 text-yellow-400 font-bold">
+                {{ exp.rating }} ★
+              </span>
             </div>
 
-            <p *ngIf="rating.invalid && rating.touched" class="text-sm text-red-600 mt-1">
-              Please select a rating.
+            <p class="text-slate-200 text-sm leading-relaxed mb-4">
+              {{ exp.comment }}
             </p>
+
+            <div class="flex justify-between items-center text-xs text-slate-200">
+              <span class="italic"> Used for {{ exp.monthsUsed }} months </span>
+
+              <div class="flex gap-4">
+                <button
+                  class="hover:text-green-400 transition cursor-pointer"
+                  (click)="vote(exp.id, 'helpful')"
+                >
+                  👍 Helpful ({{ exp.helpful }})
+                </button>
+                <button
+                  class="hover:text-red-400 transition cursor-pointer"
+                  (click)="vote(exp.id, 'notHelpful')"
+                >
+                  👎 Not Helpful ({{ exp.notHelpful }})
+                </button>
+              </div>
+            </div>
           </div>
-          <button
-            type="submit"
-            [disabled]="experienceForm.invalid"
-            class="w-full bg-tertiary enabled:hover:bg-sky-600 text-slate-100 font-semibold rounded-lg py-3 transition cursor-not-allowed disabled:opacity-50 enabled:cursor-pointer"
-          >
-            Submit Experience
-          </button>
-        </form>
-
-        } @else {
-        <div class="space-y-6 text-center">
-          <p class="text-tertiary">You need to be logged in to submit your experience.</p>
-
-          <button
-            (click)="goToLogin()"
-            class="w-full bg-tertiary hover:bg-sky-600 text-slate-100 font-semibold rounded-lg py-3 transition cursor-pointer"
-          >
-            Login First
-          </button>
         </div>
+      } @else {
+        <div class="text-center text-slate-400 italic">
+          No experiences yet. Be the first to share one!
+        </div>
+      }
+    </section>
 
+    <section class="card">
+      <div class="w-full max-w-xl mx-auto rounded-2xl bg-secondary-50 p-8 shadow-2xl space-y-6">
+        <h2 class="text-2xl font-extrabold text-center text-secondary-100">
+          Share Your Experience
+        </h2>
+
+        @if (user()?.name) {
+          @if (!experienceShared()) {
+            <form [formGroup]="experienceForm" (ngSubmit)="submitExperience()" class="space-y-5">
+              <div>
+                <label class="block text-sm font-medium text-secondary-100 mb-2">
+                  Your Experience
+                </label>
+                <textarea
+                  formControlName="comment"
+                  placeholder="Describe your real-world experience"
+                  class="w-full rounded-lg bg-white border px-4 py-3 text-tertiary focus:ring-2 focus:ring-sky-500"
+                ></textarea>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-secondary-100 mb-2">
+                  Months Used
+                </label>
+                <input
+                  type="number"
+                  min="1"
+                  step="1"
+                  formControlName="monthsUsed"
+                  inputmode="numeric"
+                  (keydown)="blockDecimal($event)"
+                  class="w-full rounded-lg bg-white border px-4 py-3 text-tertiary focus:ring-2 focus:ring-sky-500"
+                />
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-secondary-100 mb-2"> Rating </label>
+
+                <div class="flex gap-2">
+                  <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
+                    <svg
+                      (click)="setRating(star)"
+                      (mouseenter)="hoveredStar = star"
+                      (mouseleave)="hoveredStar = 0"
+                      class="w-8 h-8 cursor-pointer transition-transform hover:scale-110"
+                      [class.text-yellow-400]="star <= (hoveredStar || rating.value)"
+                      [class.text-slate-400]="star > (hoveredStar || rating.value)"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
+                      />
+                    </svg>
+                  </ng-container>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                [disabled]="experienceForm.invalid"
+                class="w-full rounded-xl bg-tertiary py-3 font-semibold text-slate-100 hover:bg-sky-600 transition disabled:opacity-50"
+              >
+                Submit Experience
+              </button>
+            </form>
+          } @else {
+            <div class="text-center space-y-4">
+              <p class="text-tertiary text-sm">
+                Thanks! You have already shared your experience for this product.
+              </p>
+            </div>
+          }
+        } @else {
+          <div class="text-center space-y-4">
+            <p class="text-tertiary text-sm">Login to share your experience</p>
+            <button
+              (click)="goToLogin()"
+              class="w-full rounded-xl bg-tertiary py-3 font-semibold text-slate-100 hover:bg-sky-600 transition cursor-pointer"
+            >
+              Login to Continue
+            </button>
+          </div>
         }
       </div>
     </section>
   </div>
+  @if (zoomImage()) {
+    <div
+      class="fixed inset-0 z-[999] flex items-center justify-center bg-black/80 backdrop-blur-sm"
+      (click)="closeImageZoom()"
+    >
+      <div
+        class="relative max-w-[90vw] max-h-[90vh] animate-[fadeIn_0.2s_ease-out]"
+        (click)="$event.stopPropagation()"
+      >
+        <button
+          class="absolute -top-10 right-0 text-white text-2xl hover:opacity-70 hover:text-red-400 transition cursor-pointer"
+          (click)="closeImageZoom()"
+        >
+          ✕
+        </button>
+        <img
+          [src]="zoomImage()"
+          class="max-h-[85vh] max-w-[85vw] object-contain rounded-2xl shadow-[0_30px_100px_rgba(0,0,0,0.9)]"
+        />
+      </div>
+    </div>
+  }
 </section>
 <app-status-modal #modal />
