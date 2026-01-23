@@ -21,6 +21,7 @@ exports.handler = async (event) => {
         p.productsummary,
         p.editorreview,
         p.editorrating,
+        p.youtubeurl,
         COALESCE(
           json_agg(pi.image_base64 ORDER BY pi.id)
           FILTER (WHERE pi.image_base64 IS NOT NULL),
@@ -39,6 +40,7 @@ exports.handler = async (event) => {
       editorReview: r.editorreview,
       editorRating: r.editorrating,
       imageBase64: r.images,
+      youtubeUrl: r.youtubeurl,
     }));
     return {
       statusCode: 200,

@@ -1,3 +1,5 @@
+import { SafeResourceUrl } from '@angular/platform-browser';
+
 export interface User {
   id?: number;
   name?: string;
@@ -16,6 +18,7 @@ export interface Product {
   editorReview: string;
   editorRating: number;
   imageBase64: string[];
+  youtubeUrl?: string;
 }
 
 export interface Experience {
@@ -50,3 +53,5 @@ export interface HttpResponse<T> {
   businessMessage: string;
   data: T;
 }
+
+export type ZoomContent = { type: 'image'; src: string } | { type: 'video'; src: SafeResourceUrl };

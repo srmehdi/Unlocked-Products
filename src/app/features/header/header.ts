@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { State } from '../../core/services/state/state';
 import { Role } from '../../shared/utils/enums';
@@ -11,7 +11,29 @@ import { Storage } from '../../core/services/storage/storage';
   styleUrl: './header.css',
 })
 export class Header {
-  isMenuOpen = false;
+  @ViewChild('profilePopup', { static: false }) profilePopup!: ElementRef;
+  @ViewChild('profileButton', { static: false }) profileButton!: ElementRef;
+  @ViewChild('mobileMenu', { static: false }) mobileMenu!: ElementRef;
+  @ViewChild('menuButton', { static: false }) menuButton!: ElementRef;
+
+  @HostListener('document:click', ['$event'])
+  handleOutsideClick(event: MouseEvent) {
+    // if (!this.popupOpen()) return;
+    const target = event.target as HTMLElement;
+    const clickedInsidePopup = this.profilePopup?.nativeElement.contains(target);
+    const clickedProfileButton = this.profileButton?.nativeElement.contains(target);
+    if (!clickedInsidePopup && !clickedProfileButton) {
+      this.popupOpen.set(false);
+    }
+    // if (!this.isMenuOpen()) return;
+    const clickedInsideMenu = this.mobileMenu?.nativeElement.contains(target);
+    const clickedMenuButton = this.menuButton?.nativeElement.contains(target);
+    if (!clickedInsideMenu && !clickedMenuButton) {
+      this.isMenuOpen.set(false);
+    }
+  }
+
+  isMenuOpen = signal(false);
   state = inject(State);
   user = this.state.user;
   roles: typeof Role = Role;
@@ -19,11 +41,14 @@ export class Header {
   router = inject(Router);
   storage = inject(Storage);
 
-  toggleMenu() {
-    this.isMenuOpen = !this.isMenuOpen;
+  toggleMenu(event?: MouseEvent) {
+    event?.stopPropagation();
+    this.isMenuOpen.set(!this.isMenuOpen());
   }
-  togglePopup() {
-    this.popupOpen.update((v) => !v);
+
+  togglePopup(event?: MouseEvent) {
+    event?.stopPropagation();
+    this.popupOpen.set(!this.popupOpen());
   }
 
   closePopup() {

@@ -39,7 +39,8 @@ export class AddProduct {
       productName: ['', [Validators.required]],
       productSummary: ['', [Validators.required]],
       editorReview: ['', [Validators.required]],
-      editorRating: ['', [Validators.required]],
+      // editorRating: ['', [Validators.required]],
+      rating: [null, [Validators.required, Validators.min(1), Validators.max(5)]],
     });
   }
   onImagesUpload(event: Event) {
@@ -81,6 +82,13 @@ export class AddProduct {
   removeImage(index: number) {
     this.images.update((imgs) => imgs.filter((_, i) => i !== index));
   }
+  setRating(value: number) {
+    this.addProductForm.patchValue({ rating: value });
+  }
+  hoveredStar = 0;
+  get rating() {
+    return this.addProductForm.get('rating')!;
+  }
   products = this.state.products();
   onSubmit(): void {
     if (this.addProductForm.valid && this.images().length > 0) {
@@ -88,7 +96,7 @@ export class AddProduct {
       const payload: ProductPayload = {
         productName: this.addProductForm.get('productName')?.value,
         productSummary: this.addProductForm.get('productSummary')?.value,
-        editorRating: this.addProductForm.get('editorRating')?.value,
+        editorRating: this.addProductForm.get('rating')?.value,
         editorReview: this.addProductForm.get('editorReview')?.value,
         imageBase64: this.images(),
       };
@@ -122,7 +130,7 @@ export class AddProduct {
           this.modal.showError({
             message: 'Product addition failed. Please try again later.',
             fn: () => {
-              this.addProductForm.reset();
+              // this.addProductForm.reset();
             },
           });
         },

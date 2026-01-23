@@ -12,7 +12,9 @@ import { Experience, Product, ProductExperience } from '../../../core/models/int
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { StatusModal } from '../../../shared/modals/status-modal/status-modal';
 import { Http } from '../../../core/services/http/http';
+import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 
+type ZoomContent = { type: 'image'; src: string } | { type: 'video'; src: SafeResourceUrl };
 @Component({
   selector: 'app-product-detail',
   imports: [FormsModule, ReactiveFormsModule, CommonModule, StatusModal],
@@ -21,6 +23,12 @@ import { Http } from '../../../core/services/http/http';
 })
 export class ProductDetail {
   @ViewChild('modal') modal!: StatusModal;
+  SUMMARY_LIMIT = 150;
+  REVIEW_LIMIT = 200;
+  USER_REVIEW_LIMIT = 100;
+  expandedSummaries = signal<Set<number>>(new Set());
+  expandedEditorReviews = signal<Set<number>>(new Set());
+  expandedUserReviews = signal<Set<number>>(new Set());
   state = inject(State);
   products = this.state.products();
   product = signal<Product | null>(null);
@@ -32,14 +40,63 @@ export class ProductDetail {
   hoveredStar = 0;
   activatedRoute = inject(ActivatedRoute);
   experienceForm: FormGroup;
+  zoomContent = signal<ZoomContent | null>(null);
   fb = inject(FormBuilder);
   router = inject(Router);
-  constructor() {
+  constructor(private sanitizer: DomSanitizer) {
     this.experienceForm = this.fb.group({
       comment: ['', Validators.required],
       monthsUsed: [null, [Validators.required, Validators.min(1), Validators.max(120)]],
       rating: [null, [Validators.required, Validators.min(1), Validators.max(5)]],
     });
+  }
+  isSummaryExpanded(index: number): boolean {
+    return this.expandedSummaries().has(index);
+  }
+
+  toggleSummary(index: number) {
+    const set = new Set(this.expandedSummaries());
+    set.has(index) ? set.delete(index) : set.add(index);
+    this.expandedSummaries.set(set);
+  }
+
+  getSummary(text: string, index: number): string {
+    if (!text) return '';
+    return this.isSummaryExpanded(index) || text.length <= this.SUMMARY_LIMIT
+      ? text
+      : text.slice(0, this.SUMMARY_LIMIT) + '…';
+  }
+  isReviewExpanded(index: number): boolean {
+    return this.expandedEditorReviews().has(index);
+  }
+
+  toggleReview(index: number) {
+    const set = new Set(this.expandedEditorReviews());
+    set.has(index) ? set.delete(index) : set.add(index);
+    this.expandedEditorReviews.set(set);
+  }
+
+  getReview(text: string, index: number): string {
+    if (!text) return '';
+    return this.isReviewExpanded(index) || text.length <= this.REVIEW_LIMIT
+      ? text
+      : text.slice(0, this.REVIEW_LIMIT) + '…';
+  }
+  isUserReviewExpanded(index: number): boolean {
+    return this.expandedUserReviews().has(index);
+  }
+
+  toggleUserReview(index: number) {
+    const set = new Set(this.expandedUserReviews());
+    set.has(index) ? set.delete(index) : set.add(index);
+    this.expandedUserReviews.set(set);
+  }
+
+  getUserReview(text: string, index: number): string {
+    if (!text) return '';
+    return this.isUserReviewExpanded(index) || text.length <= this.USER_REVIEW_LIMIT
+      ? text
+      : text.slice(0, this.USER_REVIEW_LIMIT) + '…';
   }
   setRating(value: number) {
     this.experienceForm.patchValue({ rating: value });
@@ -52,11 +109,33 @@ export class ProductDetail {
   }
   zoomImage = signal<string | null>(null);
 
-  openImageZoom(src: string | undefined) {
-    if (!src) return;
-    this.zoomImage.set(src);
-    document.body.style.overflow = 'hidden';
+  // openImageZoom(src: string | undefined) {
+  //   if (!src) return;
+  //   this.zoomImage.set(src);
+  //   document.body.style.overflow = 'hidden';
+  // }
+  openImageZoom(src: string) {
+    this.zoomContent.set({ type: 'image', src });
   }
+  openVideoZoom(youtubeUrl: string) {
+    const embedUrl = this.getYoutubeEmbedUrl(youtubeUrl);
+    console.log('embedUrl', embedUrl);
+
+    if (!embedUrl) return;
+
+    this.zoomContent.set({
+      type: 'video',
+      src: this.sanitizer.bypassSecurityTrustResourceUrl(embedUrl),
+    });
+  }
+  closeZoom() {
+    this.zoomContent.set(null);
+  }
+  getYoutubeEmbedUrl(url: string): string | null {
+    const match = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]{11})/);
+    return match ? `https://www.youtube.com/embed/${match[1]}?autoplay=1` : null;
+  }
+
   closeImageZoom() {
     this.zoomImage.set(null);
     document.body.style.overflow = '';

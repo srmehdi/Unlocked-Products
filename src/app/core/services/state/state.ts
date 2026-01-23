@@ -26,7 +26,7 @@ export class State {
   private readonly _product = signal<Product[] | null>(this.storage.getProduct());
   readonly products = this._product.asReadonly();
   setProduct(products: Product[]) {
-    // this.storage.setProduct(products);
+    this.storage.setProduct(products);
     this._product.set(products);
   }
 }

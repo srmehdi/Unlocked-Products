@@ -1,4 +1,4 @@
-import { Component, HostListener, inject, signal, ViewChild } from '@angular/core';
+import { Component, computed, HostListener, inject, signal, ViewChild } from '@angular/core';
 import { Storage } from '../../../core/services/storage/storage';
 import { Product, User } from '../../../core/models/interface';
 import { Http } from '../../../core/services/http/http';
@@ -15,6 +15,10 @@ import { State } from '../../../core/services/state/state';
 })
 export class EmployeeDashboard {
   @ViewChild('modal') modal!: StatusModal;
+  SUMMARY_LIMIT = 100;
+  REVIEW_LIMIT = 100;
+  expandedSummaries = signal<Set<number>>(new Set());
+  expandedEditorReviews = signal<Set<number>>(new Set());
   showSpinner = signal<boolean>(false);
 
   activeIndex = signal(0);
@@ -25,6 +29,39 @@ export class EmployeeDashboard {
     private http: Http,
     private router: Router,
   ) {}
+  isSummaryExpanded(index: number): boolean {
+    return this.expandedSummaries().has(index);
+  }
+
+  toggleSummary(index: number) {
+    const set = new Set(this.expandedSummaries());
+    set.has(index) ? set.delete(index) : set.add(index);
+    this.expandedSummaries.set(set);
+  }
+
+  getSummary(text: string, index: number): string {
+    if (!text) return '';
+    return this.isSummaryExpanded(index) || text.length <= this.SUMMARY_LIMIT
+      ? text
+      : text.slice(0, this.SUMMARY_LIMIT) + '…';
+  }
+  isReviewExpanded(index: number): boolean {
+    return this.expandedEditorReviews().has(index);
+  }
+
+  toggleReview(index: number) {
+    const set = new Set(this.expandedEditorReviews());
+    set.has(index) ? set.delete(index) : set.add(index);
+    this.expandedEditorReviews.set(set);
+  }
+
+  getReview(text: string, index: number): string {
+    if (!text) return '';
+    return this.isReviewExpanded(index) || text.length <= this.REVIEW_LIMIT
+      ? text
+      : text.slice(0, this.REVIEW_LIMIT) + '…';
+  }
+
   next() {
     this.activeIndex.update((i) => (i + 1) % this.products()?.length);
   }
@@ -81,6 +118,20 @@ export class EmployeeDashboard {
     this.getProducts(1);
   }
   zoomImage = signal<string | null>(null);
+  searchTerm = signal('');
+  filteredProducts = computed(() => {
+    const term = this.searchTerm().toLowerCase().trim();
+
+    if (!term) {
+      return this.products();
+    }
+
+    return this.products().filter(
+      (p) =>
+        p.productName?.toLowerCase().includes(term) ||
+        p.productSummary?.toLowerCase().includes(term),
+    );
+  });
 
   openImageZoom(event: MouseEvent, src: string | undefined) {
     event.stopPropagation();
