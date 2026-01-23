@@ -1,22 +1,60 @@
 <section class="card">
   <div class="max-w-5xl mx-auto space-y-12">
     <section class="grid mb-4 md:grid-cols-2 gap-8">
-      <div class="relative rounded-2xl overflow-hidden bg-black shadow-xl">
-        @if (product()?.imageBase64?.length) {
+      <div
+        class="relative rounded-2xl overflow-hidden bg-black shadow-xl"
+        (touchstart)="onTouchStart($event)"
+        (touchend)="onTouchEnd($event)"
+      >
+        <!-- @if (product()?.imageBase64?.length) {
           <img
             [src]="product()?.imageBase64?.[0]"
             class="h-[52vh] w-full object-contain rounded-2xl bg-black cursor-zoom-in pointer-events-auto relative z-10 shadow-[0_25px_60px_rgba(0,0,0,0.6)] hover:scale-[1.01] transition"
             (click)="openImageZoom(product()?.imageBase64?.[0]!)"
           />
+        }  -->
+        @if (product()?.imageBase64?.length) {
+          <div class="relative group">
+            <img
+              [src]="product()?.imageBase64?.[activeImageIndex()]"
+              class="h-[36vh] sm:h-[52vh] w-full object-contain rounded-2xl bg-black cursor-zoom-in pointer-events-auto relative z-10 shadow-[0_25px_60px_rgba(0,0,0,0.6)] hover:scale-[1.01] transition"
+              (click)="openImageZoom(product()?.imageBase64?.[activeImageIndex()]!)"
+            />
+            @if (product()?.imageBase64?.length! > 1) {
+              <button
+                class="absolute left-3 top-1/2 -translate-y-1/2 z-20 h-9 w-9 rounded-full bg-black/60 text-white opacity-0 group-hover:opacity-100 transition cursor-pointer hover:bg-sky-600"
+                (click)="prevImage($event)"
+              >
+                ‹
+              </button>
+              <button
+                class="absolute right-3 top-1/2 -translate-y-1/2 z-20 h-9 w-9 rounded-full bg-black/60 text-white opacity-0 group-hover:opacity-100 transition cursor-pointer hover:bg-sky-600"
+                (click)="nextImage($event)"
+              >
+                ›
+              </button>
+            }
+            @if (product()?.imageBase64?.length! > 1) {
+              <div class="absolute bottom-2 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+                @for (img of product()?.imageBase64; track $index) {
+                  <span
+                    class="h-2 w-2 rounded-full transition"
+                    [class.bg-white]="$index === activeImageIndex()"
+                    [class.bg-white/40]="$index !== activeImageIndex()"
+                  ></span>
+                }
+              </div>
+            }
+          </div>
         } @else {
           <img
             src="./../../../../assets/images/placeholder_product_dark.svg"
-            class="h-[52vh] w-full object-contain"
+            class="h-[36vh] sm:h-[52vh] w-full object-contain"
           />
         }
         @if (product()?.youtubeUrl) {
           <button
-            class="absolute bottom-4 left-1/2 -translate-x-1/2 px-6 py-2 rounded-xl bg-red-600/90 text-white text-sm font-semibold hover:bg-red-700 z-30 transition shadow-lg backdrop-blur cursor-pointer"
+            class="absolute bottom-5 left-1/2 -translate-x-1/2 px-6 py-2 rounded-xl bg-red-600/90 text-white text-sm font-semibold hover:bg-red-700 z-30 transition shadow-lg backdrop-blur cursor-pointer"
             (click)="openVideoZoom(product()?.youtubeUrl!)"
           >
             ▶ Watch Video
@@ -35,7 +73,7 @@
           <span class="font-extrabold">Product Description: </span>
           {{ product()?.productSummary }}
         </p> -->
-        <p class="text-base font-semibold text-slate-500 mb-1">
+        <p class="text-base font-semibold text-slate-500 mb-0">
           <span class="font-extrabold">Product Description: </span>
           {{ getSummary(product()?.productSummary!, product()?.id!) }}
         </p>
@@ -53,7 +91,7 @@
           <span class="font-extrabold">Editor Review: </span>
           {{ product()?.editorReview }}
         </p> -->
-        <p class="text-sm leading-relaxed text-slate-600 mb-1">
+        <p class="text-sm leading-relaxed text-slate-600 mb-0">
           <span class="font-extrabold">Editor Review: </span>
           {{ getReview(product()?.editorReview!, product()?.id!) }}
         </p>

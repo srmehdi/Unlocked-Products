@@ -221,6 +221,36 @@ export class ProductDetail {
       // }
     );
   }
+  activeImage = 0;
+
+  activeImageIndex(): number {
+    return this.activeImage;
+  }
+
+  nextImage(event?: Event) {
+    event?.stopPropagation();
+    const total = this.product()?.imageBase64?.length ?? 0;
+    this.activeImage = (this.activeImage + 1) % total;
+  }
+
+  prevImage(event?: Event) {
+    event?.stopPropagation();
+    const total = this.product()?.imageBase64?.length ?? 0;
+    this.activeImage = (this.activeImage - 1 + total) % total;
+  }
+  touchStartX = 0;
+
+  onTouchStart(event: TouchEvent) {
+    this.touchStartX = event.changedTouches[0].screenX;
+  }
+
+  onTouchEnd(event: TouchEvent) {
+    const deltaX = event.changedTouches[0].screenX - this.touchStartX;
+    if (Math.abs(deltaX) > 50) {
+      deltaX > 0 ? this.prevImage() : this.nextImage();
+    }
+  }
+
   sortBy = signal<'recent' | 'longest' | 'helpful'>('recent');
   isOpen = signal(false);
 

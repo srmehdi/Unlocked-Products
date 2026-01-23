@@ -11,7 +11,7 @@
 
     @if (topProducts().length > 0) {
       <div
-        class="relative overflow-hidden rounded-2xl bg-beige-darker shadow-[0_40px_80px_rgba(0,0,0,0.45)] border border-black/10"
+        class="relative overflow-hidden rounded-2xl bg-beige-darker shadow-[0_40px_60px_rgba(0,0,0,0.45)] border border-black/10"
       >
         <div
           class="flex transition-transform duration-700 ease-[cubic-bezier(.4,0,.2,1)]"
@@ -23,16 +23,16 @@
               @if (product?.imageBase64?.length) {
                 <img
                   [src]="product?.imageBase64?.[0]"
-                  class="h-[52vh] w-full object-contain rounded-2xl bg-black cursor-zoom-in shadow-[0_25px_60px_rgba(0,0,0,0.6)] hover:scale-[1.01] transition"
+                  class="h-[24vh] sm:h-[46vh] w-full object-contain rounded-2xl bg-black cursor-zoom-in shadow-[0_25px_20px_rgba(0,0,0,0.6)] hover:scale-[1.01] transition"
                   (click)="openImageZoom($event, product?.imageBase64?.[0])"
                 />
               } @else {
                 <img
                   src="./../../../../assets/images/placeholder_product_dark.svg"
-                  class="h-[52vh] w-full object-contain rounded-2xl bg-black"
+                  class="h-[24vh] sm:h-[52vh] w-full object-contain rounded-2xl bg-black"
                 />
               }
-              <h1 class="text-3xl font-bold text-tertiary tracking-wide">
+              <h1 class="text-2xl sm:text-3xl font-bold text-tertiary tracking-wide">
                 {{ product.productName }}
               </h1>
 
@@ -138,18 +138,62 @@
           <div
             class="group bg-beige-lighter rounded-2xl p-6 text-center border border-beige-lighter shadow-[0_20px_40px_rgba(0,0,0,0.25)] hover:shadow-[0_30px_70px_rgba(0,0,0,0.35)] hover:border-sky-500 transition-all duration-300 flex flex-col h-full"
           >
-            <img
+            <!-- <img
               [src]="product?.imageBase64?.[0]"
               class="h-[40vh] w-full object-contain rounded-xl mb-5 bg-black cursor-zoom-in"
               (click)="openImageZoom($event, product?.imageBase64?.[0])"
-            />
-            <h3 class="text-lg font-semibold text-tertiary mb-1">
+            /> -->
+            <div
+              class="relative group"
+              (touchstart)="onTouchStart($event, product.id!)"
+              (touchend)="onTouchEnd($event, product.id!, product.imageBase64.length)"
+            >
+              <!-- <img
+                [src]="product.imageBase64[cardImageIndex(product.id!)]"
+                class="h-[24vh] sm:h-[40vh] w-full object-contain rounded-xl bg-black cursor-zoom-in transition"
+                (click)="openImageZoom($event, product.imageBase64[cardImageIndex(product.id!)])"
+              /> -->
+              @if (product?.imageBase64?.length) {
+                <img
+                  [src]="product.imageBase64[cardImageIndex(product.id!)]"
+                  class="h-[24vh] sm:h-[32vh] w-full object-contain rounded-xl bg-black cursor-zoom-in transition"
+                  (click)="openImageZoom($event, product.imageBase64[cardImageIndex(product.id!)])"
+                />
+              } @else {
+                <img
+                  src="./../../../../assets/images/placeholder_product_dark.svg"
+                  class="h-[24vh] sm:h-[32vh] w-full object-contain rounded-2xl bg-black"
+                />
+              }
+              @if (product.imageBase64.length > 1) {
+                <button
+                  class="absolute left-2 top-1/2 -translate-y-1/2 bg-black/60 text-white h-8 w-8 rounded-full opacity-0 group-hover:opacity-100 transition cursor-pointer hover:bg-sky-600"
+                  (click)="prevCardImage($event, product.id!, product.imageBase64.length)"
+                >
+                  ‹
+                </button>
+                <button
+                  class="absolute right-2 top-1/2 -translate-y-1/2 bg-black/60 text-white h-8 w-8 rounded-full opacity-0 group-hover:opacity-100 transition cursor-pointer hover:bg-sky-600"
+                  (click)="nextCardImage($event, product.id!, product.imageBase64.length)"
+                >
+                  ›
+                </button>
+              }
+              @if (product.imageBase64.length > 1) {
+                <div class="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1">
+                  @for (img of product.imageBase64; track $index) {
+                    <span
+                      class="h-1.5 w-1.5 rounded-full"
+                      [class.bg-white]="$index === cardImageIndex(product.id!)"
+                      [class.bg-white/40]="$index !== cardImageIndex(product.id!)"
+                    ></span>
+                  }
+                </div>
+              }
+            </div>
+            <h3 class="text-lg font-semibold text-tertiary my-1">
               {{ product.productName }}
             </h3>
-
-            <!-- <p class="text-sm text-tertiary/70 mb-3">
-              {{ product.productSummary }}
-            </p> -->
             <p class="text-sm text-tertiary/70 mb-1 transition-all">
               {{ getSummary(product.productSummary, product?.id!) }}
             </p>
