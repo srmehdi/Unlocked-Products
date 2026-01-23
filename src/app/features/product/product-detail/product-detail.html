@@ -227,8 +227,8 @@
       }
     </section>
 
-    <section class="card">
-      <div class="w-full max-w-xl mx-auto rounded-2xl bg-secondary-50 p-8 shadow-2xl space-y-6">
+    <section class="">
+      <div class="w-full max-w-5xl mx-auto rounded-2xl bg-secondary-50 p-8 shadow-2xl space-y-6">
         <h2 class="text-2xl font-extrabold text-center text-secondary-100">
           Share Your Experience
         </h2>
@@ -244,7 +244,7 @@
                 <textarea
                   formControlName="comment"
                   placeholder="Describe your real-world experience"
-                  class="w-full rounded-lg bg-white border px-4 py-3 text-tertiary focus:ring-2 focus:ring-sky-500"
+                  class="w-full rounded-lg bg-white border px-4 py-3 text-tertiary placeholder-slate-400 placeholder:text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
                 ></textarea>
                 <div
                   *ngIf="comment.invalid && (comment.dirty || comment.touched)"
@@ -266,7 +266,8 @@
                   formControlName="monthsUsed"
                   inputmode="numeric"
                   (keydown)="blockDecimal($event)"
-                  class="w-full rounded-lg bg-white border px-4 py-3 text-tertiary focus:ring-2 focus:ring-sky-500"
+                  placeholder="Enter months in numeric (e.g. 7)"
+                  class="w-full rounded-lg bg-white border px-4 py-3 text-tertiary placeholder-slate-400 placeholder:text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
                 />
                 <div
                   *ngIf="monthsUsed.invalid && (monthsUsed.dirty || monthsUsed.touched)"
@@ -304,13 +305,22 @@
                 </div>
               </div>
 
-              <button
+              <!-- <button
                 type="submit"
                 [disabled]="experienceForm.invalid"
                 class="w-full rounded-xl bg-tertiary py-3 font-semibold text-slate-100 hover:bg-sky-600 transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
               >
                 Submit Experience
-              </button>
+              </button> -->
+              <div class="flex justify-end">
+                <button
+                  type="submit"
+                  [disabled]="experienceForm.invalid"
+                  class="bg-tertiary enabled:hover:bg-sky-600 text-slate-100 font-semibold px-5 py-3 rounded-lg ml-0 transition disabled:opacity-50 hover:cursor-pointer disabled:cursor-not-allowed w-70 max-md:w-full"
+                >
+                  Submit Experience
+                </button>
+              </div>
             </form>
           } @else {
             <div class="text-center space-y-4">
@@ -324,7 +334,7 @@
             <p class="text-tertiary text-sm">Login to share your experience</p>
             <button
               (click)="goToLogin()"
-              class="w-full rounded-xl bg-tertiary py-3 font-semibold text-slate-100 hover:bg-sky-600 transition cursor-pointer"
+              class="rounded-xl bg-tertiary py-3 font-semibold text-slate-100 hover:bg-sky-600 transition cursor-pointer w-70 max-md:w-full"
             >
               Login to Continue
             </button>

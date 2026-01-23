@@ -51,4 +51,12 @@ export class Http {
     return this.http.post<any>('/api/get-experiences', productId);
     // return this.http.get<User>('./assets/jsons/user.json');
   }
+  sendPing(visitorId: { visitorId: string }) {
+    return this.http.post<any>('/api/heart-beat', visitorId);
+    // return this.http.get<User>('./assets/jsons/user.json');
+  }
+  getActivityStats() {
+    return this.http.get<any>('/api/activity-stats');
+    // return this.http.get<User>('./assets/jsons/user.json');
+  }
 }
