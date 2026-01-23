@@ -87,83 +87,177 @@
               @if (popupOpen()) {
                 <div
                   #profilePopup
-                  class="absolute right-0 mt-3 w-52 rounded-xl bg-secondary-50 shadow-[0_25px_60px_rgba(0,0,0,0.5)] border border-white/10 z-50 overflow-hidden"
+                  class="absolute right-[-16px] pb-2 mt-3 w-70 rounded-bl-xl bg-secondary-50 shadow-[0_25px_60px_rgba(0,0,0,0.5)] border border-white/10 z-50 overflow-hidden animate-[fadeIn_0.15s_ease-out]"
                 >
                   <div
-                    class="px-6 py-4 text-lg font-semibold text-gray-800 border-b border-black/10"
+                    class="px-5 py-4 border-b border-black/10 bg-gradient-to-r from-sky-50 to-beige-light"
                   >
-                    Hello, {{ user()?.name || 'User' }}
+                    <div class="flex items-center gap-3">
+                      <div
+                        class="h-10 w-10 rounded-full bg-gradient-to-br from-sky-500 to-indigo-500 flex items-center justify-center text-white font-bold shadow-md"
+                      >
+                        {{ (user()?.name || 'U')[0] }}
+                      </div>
+
+                      <div>
+                        <p class="text-sm text-slate-500">Welcome</p>
+                        <p class="text-base font-semibold text-gray-900 truncate">
+                          {{ user()?.name || 'Guest User' }}
+                        </p>
+                      </div>
+                    </div>
                   </div>
+                  @if (user()?.role?.includes(roles.ADMIN)) {
+                    <div class="px-5 py-2 space-y-2 border-b border-black/10">
+                      <div
+                        class="flex justify-between items-center rounded-xl bg-beige-light px-4 py-2 shadow-inner"
+                      >
+                        <span class="text-sm font-medium text-slate-600">Active Users</span>
+                        <span class="text-lg font-bold text-sky-600">
+                          {{ activityStats?.activeUsers?.[0]?.count || 0 }}
+                        </span>
+                      </div>
+
+                      <div
+                        class="flex justify-between items-center rounded-xl bg-beige-light px-4 py-2 shadow-inner"
+                      >
+                        <span class="text-sm font-medium text-slate-600">Total Visitors</span>
+                        <span class="text-lg font-bold text-indigo-600">
+                          {{ activityStats?.totalUsers?.[0]?.count || 0 }}
+                        </span>
+                      </div>
+                    </div>
+                  }
 
                   <div class="divide-y divide-black/10">
                     @if (!user()?.name) {
-                      <a
-                        routerLink="/login"
-                        routerLinkActive="text-chestnut! pointer-events-none!"
-                        (click)="closePopup()"
-                        class="block px-6 py-3 text-tertiary hover:bg-beige-light hover:text-sky-400 transition"
-                      >
-                        Login
-                      </a>
+                      <div class="px-5 py-2 space-y-2 border-b border-black/10">
+                        <div
+                          class="flex justify-between items-center rounded-xl bg-beige-light shadow-inner"
+                        >
+                          <a
+                            routerLink="/login"
+                            routerLinkActive="bg-white rounded-xl text-chestnut! pointer-events-none!"
+                            (click)="closePopup()"
+                            class="block w-full text-center px-6 py-3 text-tertiary hover:bg-beige-light hover:text-sky-400 hover:bg-red-50 hover:rounded-xl"
+                          >
+                            Login
+                          </a>
+                        </div>
+                      </div>
 
-                      <a
-                        routerLink="/register"
-                        routerLinkActive="text-chestnut! pointer-events-none!"
-                        (click)="closePopup()"
-                        class="block px-6 py-3 text-tertiary hover:bg-beige-light hover:text-sky-400 transition"
-                      >
-                        Register
-                      </a>
+                      <div class="px-5 py-2 space-y-2 border-b border-black/10">
+                        <div
+                          class="flex justify-between items-center rounded-xl bg-beige-light shadow-inner"
+                        >
+                          <a
+                            routerLink="/register"
+                            routerLinkActive="bg-white rounded-xl text-chestnut! pointer-events-none!"
+                            (click)="closePopup()"
+                            class="block w-full text-center px-6 py-3 text-tertiary hover:bg-beige-light hover:text-sky-400 hover:bg-red-50 hover:rounded-xl"
+                          >
+                            Register
+                          </a>
+                        </div>
+                      </div>
                     } @else {
-                      <button
-                        (click)="logout()"
-                        class="w-full text-left px-6 py-3 text-red-700 hover:bg-red-50 transition cursor-pointer"
-                      >
-                        Logout
-                      </button>
+                      <div class="px-5 pt-2 pb-4 space-y-3 border-b border-black/10">
+                        <div
+                          class="flex justify-between items-center rounded-xl bg-beige-light shadow-inner"
+                        >
+                          <button
+                            (click)="logout()"
+                            class="w-full text-center px-6 py-2 text-red-700 hover:bg-red-50 hover:rounded-xl cursor-pointer"
+                          >
+                            Logout
+                          </button>
+                        </div>
+                      </div>
                     }
                   </div>
                 </div>
               }
             </div>
           </div>
-          <div
-            [class.hidden]="!isMenuOpen()"
-            class="lg:hidden rounded-2xl mb-3 bg-secondary-100/95 backdrop-blur border border-white/10 shadow-xl p-4 space-y-2"
-          >
-            <!-- <a
+          @if (isMenuOpen()) {
+            <div
+              class="fixed w-70 py-4 inset-x-0 z-50 lg:hidden rounded-br-xl bg-secondary-50 backdrop-blur-xl border-b border-white/10 shadow-[0_40px_80px_rgba(0,0,0,0.6)] animate-[slideDown_0.25s_ease-out]"
+            >
+              <!-- <a
               routerLink="/"
               routerLinkActive="bg-white rounded hover:text-gray-700! text-chestnut!"
               class="block px-2 py-2"
               (click)="isMenuOpen = false"
               >Home</a
             > -->
-            <a
-              routerLink="/about"
-              routerLinkActive="bg-white rounded hover:text-gray-700! text-chestnut!"
-              (click)="this.isMenuOpen.set(false)"
-              class="block rounded-xl px-4 py-2 hover:bg-white/5 transition mb-0"
-            >
-              About
-            </a>
-
-            <a
-              routerLink="/contact"
-              routerLinkActive="bg-white rounded hover:text-gray-700! text-chestnut!"
-              class="block rounded-xl px-4 py-2 hover:bg-white/5 transition mb-0"
-              (click)="this.isMenuOpen.set(false)"
-              >Contact</a
-            >
-            @if (user()?.role?.includes(roles.ADMIN)) {
-              <a
-                routerLink="/add-product"
+              <div class="px-5 py-2 space-y-2 border-b border-black/10">
+                <div
+                  class="flex justify-between items-center rounded-xl bg-beige-light shadow-inner"
+                >
+                  <a
+                    routerLink="/about"
+                    routerLinkActive="bg-white rounded text-chestnut!"
+                    (click)="this.isMenuOpen.set(false)"
+                    class="block w-full text-center px-6 py-3 text-tertiary rounded-xl text-lg font-medium"
+                  >
+                    About
+                  </a>
+                </div>
+              </div>
+              <!-- <a
+                routerLink="/about"
                 routerLinkActive="bg-white rounded hover:text-gray-700! text-chestnut!"
-                class="block rounded-xl px-4 py-2 hover:bg-white/5 transition mb-0"
                 (click)="this.isMenuOpen.set(false)"
-                >Add Product</a
+                class="flex items-center gap-3 px-5 py-4 rounded-xl text-base font-medium hover:bg-white/10 transition"
               >
-            }
-          </div>
+                About
+              </a> -->
+              <div class="px-5 py-2 space-y-2 border-b border-black/10">
+                <div
+                  class="flex justify-between items-center rounded-xl bg-beige-light shadow-inner"
+                >
+                  <a
+                    routerLink="/contact"
+                    routerLinkActive="bg-white rounded  text-chestnut!"
+                    (click)="this.isMenuOpen.set(false)"
+                    class="block w-full text-center px-6 py-3 text-tertiary rounded-xl text-lg font-medium"
+                  >
+                    Contact
+                  </a>
+                </div>
+              </div>
+              <!-- <a
+                routerLink="/contact"
+                routerLinkActive="bg-white rounded hover:text-gray-700! text-chestnut!"
+                class="flex items-center gap-3 px-5 py-4 rounded-xl text-base font-medium hover:bg-white/10 transition"
+                (click)="this.isMenuOpen.set(false)"
+                >Contact</a
+              > -->
+              @if (user()?.role?.includes(roles.ADMIN)) {
+                <div class="px-5 py-2 space-y-2 border-b border-black/10">
+                  <div
+                    class="flex justify-between items-center rounded-xl bg-beige-light shadow-inner"
+                  >
+                    <a
+                      routerLink="/add-product"
+                      routerLinkActive="bg-white rounded  text-chestnut!"
+                      (click)="this.isMenuOpen.set(false)"
+                      class="block w-full text-center px-6 py-3 text-tertiary rounded-xl text-lg font-medium"
+                    >
+                      Add Product
+                    </a>
+                  </div>
+                </div>
+                <!-- <a
+                  routerLink="/add-product"
+                  routerLinkActive="bg-white rounded hover:text-gray-700! text-chestnut!"
+                  class="flex items-center gap-3 px-5 py-4 rounded-xl text-base font-medium hover:bg-white/10 transition"
+                  (click)="this.isMenuOpen.set(false)"
+                  >Add Product</a
+                > -->
+              }
+            </div>
+          }
         </div>
       </nav>
     </div>

@@ -3,6 +3,7 @@ import { Router, RouterModule } from '@angular/router';
 import { State } from '../../core/services/state/state';
 import { Role } from '../../shared/utils/enums';
 import { Storage } from '../../core/services/storage/storage';
+import { Http } from '../../core/services/http/http';
 
 @Component({
   selector: 'app-header',
@@ -40,7 +41,24 @@ export class Header {
   popupOpen = signal(false);
   router = inject(Router);
   storage = inject(Storage);
-
+  ngOnInit() {
+    if (this.user()?.role?.includes(this.roles.ADMIN)) {
+      this.getActivityStats();
+    }
+  }
+  http = inject(Http);
+  activityStats: any;
+  getActivityStats() {
+    this.http.getActivityStats().subscribe({
+      next: (resp) => {
+        console.log('getActivityStats resp', resp);
+        this.activityStats = resp;
+      },
+      error: (err) => {
+        console.log('getActivityStats error', err);
+      },
+    });
+  }
   toggleMenu(event?: MouseEvent) {
     event?.stopPropagation();
     this.isMenuOpen.set(!this.isMenuOpen());

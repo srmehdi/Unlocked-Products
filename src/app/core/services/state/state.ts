@@ -29,4 +29,23 @@ export class State {
     this.storage.setProduct(products);
     this._product.set(products);
   }
+  private readonly KEY = 'visitor_id';
+  getVisitorId(): string {
+    try {
+      let id = localStorage.getItem(this.KEY);
+      if (id) return id;
+      id = crypto.randomUUID();
+
+      try {
+        localStorage.setItem(this.KEY, id);
+        return id;
+      } catch (err) {
+        console.log('localStorage error', err);
+      }
+      sessionStorage.setItem(this.KEY, id);
+      return id;
+    } catch {
+      return crypto.randomUUID();
+    }
+  }
 }
