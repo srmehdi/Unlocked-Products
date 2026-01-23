@@ -129,7 +129,7 @@
           </div>
           <div
             [class.hidden]="!isMenuOpen()"
-            class="lg:hidden my-4 rounded-2xl bg-secondary-100/95 backdrop-blur border border-white/10 shadow-xl p-4 space-y-2"
+            class="lg:hidden rounded-2xl mb-3 bg-secondary-100/95 backdrop-blur border border-white/10 shadow-xl p-4 space-y-2"
           >
             <!-- <a
               routerLink="/"
@@ -142,7 +142,7 @@
               routerLink="/about"
               routerLinkActive="bg-white rounded hover:text-gray-700! text-chestnut!"
               (click)="this.isMenuOpen.set(false)"
-              class="block rounded-xl px-4 py-3 hover:bg-white/5 transition"
+              class="block rounded-xl px-4 py-2 hover:bg-white/5 transition mb-0"
             >
               About
             </a>
@@ -150,7 +150,7 @@
             <a
               routerLink="/contact"
               routerLinkActive="bg-white rounded hover:text-gray-700! text-chestnut!"
-              class="block rounded-xl px-4 py-3 hover:bg-white/5 transition"
+              class="block rounded-xl px-4 py-2 hover:bg-white/5 transition mb-0"
               (click)="this.isMenuOpen.set(false)"
               >Contact</a
             >
@@ -158,7 +158,7 @@
               <a
                 routerLink="/add-product"
                 routerLinkActive="bg-white rounded hover:text-gray-700! text-chestnut!"
-                class="block rounded-xl px-4 py-3 hover:bg-white/5 transition"
+                class="block rounded-xl px-4 py-2 hover:bg-white/5 transition mb-0"
                 (click)="this.isMenuOpen.set(false)"
                 >Add Product</a
               >

@@ -23,7 +23,7 @@ export class EmployeeDashboard {
 
   activeIndex = signal(0);
   autoPlayInterval!: any;
-  AUTO_PLAY_DELAY = 5000;
+  AUTO_PLAY_DELAY = 10000;
 
   constructor(
     private http: Http,
@@ -74,6 +74,35 @@ export class EmployeeDashboard {
       this.stopAutoPlay();
     } else {
       this.startAutoPlay();
+    }
+  }
+  cardImageMap = new Map<number, number>();
+
+  cardImageIndex(productId: number): number {
+    return this.cardImageMap.get(productId) ?? 0;
+  }
+
+  nextCardImage(event: Event, productId: number, total: number) {
+    event.stopPropagation();
+    const current = this.cardImageIndex(productId);
+    this.cardImageMap.set(productId, (current + 1) % total);
+  }
+
+  prevCardImage(event: Event, productId: number, total: number) {
+    event.stopPropagation();
+    const current = this.cardImageIndex(productId);
+    this.cardImageMap.set(productId, (current - 1 + total) % total);
+  }
+  touchStartX = 0;
+
+  onTouchStart(event: TouchEvent, id: number) {
+    this.touchStartX = event.changedTouches[0].screenX;
+  }
+
+  onTouchEnd(event: TouchEvent, id: number, total: number) {
+    const deltaX = event.changedTouches[0].screenX - this.touchStartX;
+    if (Math.abs(deltaX) > 50) {
+      deltaX > 0 ? this.prevCardImage(event, id, total) : this.nextCardImage(event, id, total);
     }
   }
 
