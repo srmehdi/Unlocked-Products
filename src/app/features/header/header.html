@@ -1,71 +1,74 @@
 <header>
-  <div class="fixed z-100 inset-x-0 border-b border-white/10 top-0">
-    <div
-      class="main-container h-full w-full bg-secondary-100 text-gray-200 px-4 shadow-xl/30 shadow-amber-950"
-    >
+  <div
+    class="fixed inset-x-0 top-0 z-100 backdrop-blur-md bg-secondary-100/80 border-b border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.45)]"
+  >
+    <div class="main-container px-4 text-gray-200">
       <nav class="">
         <div class="mx-auto">
           <div class="flex items-center text-xl font-medium justify-between">
             <div class="lg:hidden">
-              <button (click)="toggleMenu()" class="text-beige-darker">
+              <button
+                #menuButton
+                (click)="toggleMenu()"
+                class="p-2 rounded-xl hover:bg-white/5 transition"
+              >
                 <svg
-                  class="w-10 h-10"
+                  class="w-9 h-9 text-beige-darker"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
                     stroke-width="2"
                     d="M4 6h16M4 12h16M4 18h16"
-                  ></path>
+                  />
                 </svg>
               </button>
             </div>
-            <div class="max-md:flex max-md:justify-center">
-              <a routerLink="/" class="">
+            <div class="flex justify-center lg:justify-start">
+              <a routerLink="/" class="transition hover:scale-[1.02]">
                 <img
                   src="./../../../assets/images/logo.svg"
                   alt="UnlockedProducts logo"
-                  width="280"
+                  width="260"
                 />
               </a>
             </div>
-            <div class="hidden lg:flex items-center">
-              <!-- <a
-                routerLink="/"
-                routerLinkActive="bg-beige-lighter rounded hover:text-gray-700! text-chestnut!"
-                class="hover:text-sky-400 transition duration-300 py-4 px-12"
-                >Home</a
-              > -->
+            <div class="hidden lg:flex items-center gap-2">
               <a
                 routerLink="/about"
-                routerLinkActive="bg-beige rounded hover:text-gray-700! text-chestnut!"
-                class="hover:text-sky-400 transition duration-300 py-4 px-12"
-                >About</a
+                routerLinkActive="bg-beige/80 text-chestnut"
+                class="relative px-8 py-3 rounded-xl hover:text-sky-400 transition"
               >
+                About
+              </a>
+
               <a
                 routerLink="/contact"
-                routerLinkActive="bg-beige-darker rounded hover:text-gray-700! text-chestnut!"
-                class="hover:text-sky-400 transition duration-300 py-4 px-12"
-                >Contact</a
+                routerLinkActive="bg-beige/80 text-chestnut"
+                class="relative px-8 py-3 rounded-xl hover:text-sky-400 transition"
               >
-              @if(user()?.role?.includes(roles.ADMIN)){
-              <a
-                routerLink="/add-product"
-                routerLinkActive="bg-beige-darker rounded hover:text-gray-700! text-chestnut!"
-                class="hover:text-sky-400 transition duration-300 py-4 px-12"
-                >Add Product</a
-              >
+                Contact
+              </a>
+
+              @if (user()?.role?.includes(roles.ADMIN)) {
+                <a
+                  routerLink="/add-product"
+                  routerLinkActive="bg-beige/80 text-chestnut"
+                  class="relative px-8 py-3 rounded-xl hover:text-sky-400 transition"
+                >
+                  Add Product
+                </a>
               }
             </div>
+
             <div class="relative">
               <button
+                #profileButton
                 (click)="togglePopup()"
-                class="w-13 h-13 rounded-full bg-beige-darker flex items-center justify-center text-tertiary hover:text-white hover:bg-sky-400 transition cursor-pointer"
-                aria-label="User profile"
+                class="w-12 h-12 lg:ml-53 rounded-full bg-beige-darker/80 backdrop-blur flex items-center justify-center text-tertiary shadow-lg hover:bg-sky-400 hover:text-white transition-all duration-300 cursor-pointer"
               >
                 <svg
                   class="w-5 h-5"
@@ -82,50 +85,52 @@
                 </svg>
               </button>
               @if (popupOpen()) {
-              <div class="absolute right-0 mt-1 w-44 rounded-md bg-secondary-50 shadow-xl z-50">
-                <div class="px-6 pt-4 text-[16px] md:text-lg text-gray-700 w-full text-left">
-                  Hello, {{ user()?.name || 'User' }}!
-                </div>
-                @if (!user()?.name) {
                 <div
-                  class="px-6 pb-2 pt-4 text-[16px] md:text-lg hover:bg-beige-light transition cursor-pointer text-tertiary hover:text-sky-400 w-full text-left"
+                  #profilePopup
+                  class="absolute right-0 mt-3 w-52 rounded-xl bg-secondary-50 shadow-[0_25px_60px_rgba(0,0,0,0.5)] border border-white/10 z-50 overflow-hidden"
                 >
-                  <button>
-                    <a
-                      class="block w-full"
-                      (click)="closePopup()"
-                      routerLink="/login"
-                      routerLinkActive="text-chestnut pointer-events-none!"
-                      >Login</a
-                    >
-                  </button>
-                </div>
-                <div
-                  class="px-6 pt-2 pb-4 text-[16px] md:text-lg hover:bg-beige-light transition cursor-pointer text-tertiary hover:text-sky-400 w-full text-left"
-                >
-                  <a
-                    class="block w-full"
-                    (click)="closePopup()"
-                    routerLink="/register"
-                    routerLinkActive="text-chestnut pointer-events-none!"
-                    >Register</a
+                  <div
+                    class="px-6 py-4 text-lg font-semibold text-gray-800 border-b border-black/10"
                   >
+                    Hello, {{ user()?.name || 'User' }}
+                  </div>
+
+                  <div class="divide-y divide-black/10">
+                    @if (!user()?.name) {
+                      <a
+                        routerLink="/login"
+                        routerLinkActive="text-chestnut! pointer-events-none!"
+                        (click)="closePopup()"
+                        class="block px-6 py-3 text-tertiary hover:bg-beige-light hover:text-sky-400 transition"
+                      >
+                        Login
+                      </a>
+
+                      <a
+                        routerLink="/register"
+                        routerLinkActive="text-chestnut! pointer-events-none!"
+                        (click)="closePopup()"
+                        class="block px-6 py-3 text-tertiary hover:bg-beige-light hover:text-sky-400 transition"
+                      >
+                        Register
+                      </a>
+                    } @else {
+                      <button
+                        (click)="logout()"
+                        class="w-full text-left px-6 py-3 text-red-700 hover:bg-red-50 transition cursor-pointer"
+                      >
+                        Logout
+                      </button>
+                    }
+                  </div>
                 </div>
-                } @else {
-                <div>
-                  <button
-                    (click)="logout()"
-                    class="px-6 pb-4 text-[16px] md:text-lg hover:bg-beige-light transition cursor-pointer text-red-700 hover:text-red-900 w-full text-left"
-                  >
-                    Logout
-                  </button>
-                </div>
-                }
-              </div>
               }
             </div>
           </div>
-          <div [class.hidden]="!isMenuOpen" class="lg:hidden pb-4 font-medium">
+          <div
+            [class.hidden]="!isMenuOpen()"
+            class="lg:hidden my-4 rounded-2xl bg-secondary-100/95 backdrop-blur border border-white/10 shadow-xl p-4 space-y-2"
+          >
             <!-- <a
               routerLink="/"
               routerLinkActive="bg-white rounded hover:text-gray-700! text-chestnut!"
@@ -136,25 +141,27 @@
             <a
               routerLink="/about"
               routerLinkActive="bg-white rounded hover:text-gray-700! text-chestnut!"
-              class="block px-2 py-2"
-              (click)="isMenuOpen = false"
-              >About</a
+              (click)="this.isMenuOpen.set(false)"
+              class="block rounded-xl px-4 py-3 hover:bg-white/5 transition"
             >
+              About
+            </a>
+
             <a
               routerLink="/contact"
               routerLinkActive="bg-white rounded hover:text-gray-700! text-chestnut!"
-              class="block px-2 py-2"
-              (click)="isMenuOpen = false"
+              class="block rounded-xl px-4 py-3 hover:bg-white/5 transition"
+              (click)="this.isMenuOpen.set(false)"
               >Contact</a
             >
-            @if(user()?.role?.includes(roles.ADMIN)){
-            <a
-              routerLink="/add-product"
-              routerLinkActive="bg-white rounded hover:text-gray-700! text-chestnut!"
-              class="block px-2 py-2"
-              (click)="isMenuOpen = false"
-              >Add Product</a
-            >
+            @if (user()?.role?.includes(roles.ADMIN)) {
+              <a
+                routerLink="/add-product"
+                routerLinkActive="bg-white rounded hover:text-gray-700! text-chestnut!"
+                class="block rounded-xl px-4 py-3 hover:bg-white/5 transition"
+                (click)="this.isMenuOpen.set(false)"
+                >Add Product</a
+              >
             }
           </div>
         </div>

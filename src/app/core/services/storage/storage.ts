@@ -31,6 +31,17 @@ export class Storage {
   removeProduct() {
     this.removeItem('product');
   }
+  setProductId(productId: number) {
+    return this.setItem('productId', productId);
+  }
+  getProductId() {
+    const result = this.getItem('productId');
+    return result ? JSON.parse(result) : [];
+  }
+  removeProductId() {
+    this.removeItem('productId');
+  }
+
   private setItem<T>(key: string, value: T): void {
     try {
       const encrypted = this.encryption.encrypt<T>(value);
