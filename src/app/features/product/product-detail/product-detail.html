@@ -22,13 +22,13 @@
             />
             @if (product()?.imageBase64?.length! > 1) {
               <button
-                class="absolute left-3 top-1/2 -translate-y-1/2 z-20 h-9 w-9 rounded-full bg-black/60 text-white opacity-0 group-hover:opacity-100 transition cursor-pointer hover:bg-sky-600"
+                class="absolute left-3 top-1/2 -translate-y-1/2 z-20 h-9 w-9 rounded-full bg-black/60 text-white opacity-0 group-hover:opacity-100 transition cursor-pointer hover:bg-sky-600 animate-pulse"
                 (click)="prevImage($event)"
               >
                 ‹
               </button>
               <button
-                class="absolute right-3 top-1/2 -translate-y-1/2 z-20 h-9 w-9 rounded-full bg-black/60 text-white opacity-0 group-hover:opacity-100 transition cursor-pointer hover:bg-sky-600"
+                class="absolute right-3 top-1/2 -translate-y-1/2 z-20 h-9 w-9 rounded-full bg-black/60 text-white opacity-0 group-hover:opacity-100 transition cursor-pointer hover:bg-sky-600 animate-pulse"
                 (click)="nextImage($event)"
               >
                 ›
@@ -54,7 +54,7 @@
         }
         @if (product()?.youtubeUrl) {
           <button
-            class="absolute bottom-5 left-1/2 -translate-x-1/2 px-6 py-2 rounded-xl bg-red-600/90 text-white text-sm font-semibold hover:bg-red-700 z-30 transition shadow-lg backdrop-blur cursor-pointer"
+            class="absolute bottom-5 left-1/2 -translate-x-1/2 px-6 py-2 rounded-xl bg-red-600/90 text-white text-sm font-semibold hover:bg-red-700 z-30 transition shadow-lg backdrop-blur cursor-pointer animate-pulse"
             (click)="openVideoZoom(product()?.youtubeUrl!)"
           >
             ▶ Watch Video
@@ -80,7 +80,7 @@
 
         @if (product()?.productSummary?.length! > SUMMARY_LIMIT) {
           <button
-            class="text-xs font-semibold text-sky-400 hover:text-sky-500 transition cursor-pointer"
+            class="text-xs font-semibold text-sky-400 hover:text-sky-500 transition cursor-pointer animate-pulse"
             (click)="toggleSummary(product()?.id!)"
           >
             {{ isSummaryExpanded(product()?.id!) ? 'Show Less ↑' : 'Show More ↓' }}
@@ -98,7 +98,7 @@
 
         @if (product()?.editorReview?.length! > REVIEW_LIMIT) {
           <button
-            class="text-xs font-semibold text-sky-400 hover:text-sky-500 transition cursor-pointer"
+            class="text-xs font-semibold text-sky-400 hover:text-sky-500 transition cursor-pointer animate-pulse"
             (click)="toggleReview(product()?.id!)"
           >
             {{ isReviewExpanded(product()?.id!) ? 'Show Less ↑' : 'Show More ↓' }}
@@ -193,7 +193,7 @@
 
             @if (exp?.comment?.length! > USER_REVIEW_LIMIT) {
               <button
-                class="text-xs font-semibold text-sky-400 hover:text-sky-500 transition cursor-pointer mb-4"
+                class="text-xs font-semibold text-sky-400 hover:text-sky-500 transition cursor-pointer mb-4 animate-pulse"
                 (click)="toggleUserReview(exp?.id!)"
               >
                 {{ isUserReviewExpanded(exp?.id!) ? 'Show Less ↑' : 'Show More ↓' }}
@@ -375,7 +375,7 @@
         (click)="$event.stopPropagation()"
       >
         <button
-          class="absolute -top-10 right-0 text-white text-2xl hover:text-red-400 transition cursor-pointer"
+          class="absolute right-0 text-gray-900 font-extrabold animate-pulse px-3 text-xl rounded-sm hover:text-red-400 transition cursor-pointer bg-white"
           (click)="closeZoom()"
         >
           ✕
@@ -383,7 +383,7 @@
         @if (zoomContent()?.type === 'image') {
           <img
             [src]="zoomContent()?.src"
-            class="max-h-[85vh] max-w-[85vw] object-contain rounded-2xl shadow-[0_30px_100px_rgba(0,0,0,0.9)]"
+            class="max-h-[85vh] max-w-[85vw] object-contain rounded-sm shadow-[0_30px_100px_rgba(0,0,0,0.9)]"
           />
         }
         @if (zoomContent()?.type === 'video') {

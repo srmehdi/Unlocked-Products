@@ -15,7 +15,8 @@ import { State } from '../../../core/services/state/state';
 })
 export class EmployeeDashboard {
   @ViewChild('modal') modal!: StatusModal;
-  SUMMARY_LIMIT = 100;
+  isLoading = signal(true);
+  SUMMARY_LIMIT = 80;
   REVIEW_LIMIT = 100;
   expandedSummaries = signal<Set<number>>(new Set());
   expandedEditorReviews = signal<Set<number>>(new Set());
@@ -23,7 +24,7 @@ export class EmployeeDashboard {
 
   activeIndex = signal(0);
   autoPlayInterval!: any;
-  AUTO_PLAY_DELAY = 10000;
+  AUTO_PLAY_DELAY = 6000;
 
   constructor(
     private http: Http,
@@ -183,6 +184,7 @@ export class EmployeeDashboard {
   // products = this.state.products();
 
   getProducts(category: number) {
+    this.isLoading.set(true);
     this.modal.showLoading();
     const $destroyed: Subject<void> = new Subject();
     const payload = {
@@ -197,13 +199,16 @@ export class EmployeeDashboard {
           const tp = this.getTop5Products(products);
           this.topProducts.set(tp);
           this.modal.close();
+          this.isLoading.set(false);
         } else {
           this.modal.showError({ message: 'No products available.' });
+          this.isLoading.set(false);
         }
       },
       error: (err) => {
         console.log('Products API error: ', err);
         this.modal.showError({ message: 'Network error. Please try again later.' });
+        this.isLoading.set(false);
       },
       complete: () => {
         $destroyed.next();
