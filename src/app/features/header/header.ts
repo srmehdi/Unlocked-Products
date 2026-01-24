@@ -1,4 +1,12 @@
-import { Component, inject, signal, ElementRef, HostListener, ViewChild } from '@angular/core';
+import {
+  Component,
+  inject,
+  signal,
+  ElementRef,
+  HostListener,
+  ViewChild,
+  effect,
+} from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { State } from '../../core/services/state/state';
 import { Role } from '../../shared/utils/enums';
@@ -41,18 +49,20 @@ export class Header {
   popupOpen = signal(false);
   router = inject(Router);
   storage = inject(Storage);
-  ngOnInit() {
-    if (this.user()?.role?.includes(this.roles.ADMIN)) {
-      this.getActivityStats();
-    }
+  constructor() {
+    effect(() => {
+      if (this.user()?.role?.includes(this.roles.ADMIN)) {
+        this.getActivityStats();
+      }
+    });
   }
   http = inject(Http);
-  activityStats: any;
+  activityStats: any = signal(null);
   getActivityStats() {
     this.http.getActivityStats().subscribe({
       next: (resp) => {
         console.log('getActivityStats resp', resp);
-        this.activityStats = resp;
+        this.activityStats.set(resp);
       },
       error: (err) => {
         console.log('getActivityStats error', err);

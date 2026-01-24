@@ -6,7 +6,7 @@ export const handler: Handler = async () => {
     const activeResult = await query(`
     SELECT COUNT(*) AS count
     FROM visitors
-    WHERE last_seen > NOW() - INTERVAL '30 seconds'
+    WHERE last_seen > NOW() - INTERVAL '60 seconds'
   `);
 
     const totalResult = await query(`

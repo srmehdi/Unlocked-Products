@@ -36,6 +36,7 @@ export interface Experience {
 export interface ProductPayload {
   productName: string;
   productSummary: string;
+  youtubeUrl: string;
   editorReview: string;
   editorRating: number;
   imageBase64: string[];

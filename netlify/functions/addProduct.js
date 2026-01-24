@@ -8,14 +8,15 @@ exports.handler = async (event) => {
 
     const body = event.body ? JSON.parse(event.body) : {};
 
-    const { productName, productSummary, editorReview, editorRating, imageBase64 } = body;
+    const { productName, productSummary, youtubeUrl, editorReview, editorRating, imageBase64 } =
+      body;
     if (!productName || !productSummary || !editorReview || !editorRating) {
       return { statusCode: 400, body: JSON.stringify({ error: 'Missing required fields' }) };
     }
 
     const res = await query(
-      'INSERT INTO "product" (productName, productSummary, editorReview, editorRating) VALUES ($1, $2, $3, $4) RETURNING *',
-      [productName, productSummary, editorReview, editorRating || null]
+      'INSERT INTO "product" (productName, productSummary, youtubeUrl, editorReview, editorRating) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+      [productName, productSummary, youtubeUrl, editorReview, editorRating || null],
     );
 
     const productId = res.rows[0].id;
@@ -24,7 +25,7 @@ exports.handler = async (event) => {
       await query(
         `INSERT INTO product_images (product_id, image_base64)
            VALUES ($1, $2)`,
-        [productId, imageBase64[i]]
+        [productId, imageBase64[i]],
       );
     }
 

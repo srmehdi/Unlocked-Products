@@ -38,6 +38,7 @@ export class AddProduct {
     this.addProductForm = this.fb.group({
       productName: ['', [Validators.required]],
       productSummary: ['', [Validators.required]],
+      youtubeUrl: [''],
       editorReview: ['', [Validators.required]],
       // editorRating: ['', [Validators.required]],
       rating: [null, [Validators.required, Validators.min(1), Validators.max(5)]],
@@ -96,6 +97,7 @@ export class AddProduct {
       const payload: ProductPayload = {
         productName: this.addProductForm.get('productName')?.value,
         productSummary: this.addProductForm.get('productSummary')?.value,
+        youtubeUrl: this.addProductForm.get('youtubeUrl')?.value,
         editorRating: this.addProductForm.get('rating')?.value,
         editorReview: this.addProductForm.get('editorReview')?.value,
         imageBase64: this.images(),

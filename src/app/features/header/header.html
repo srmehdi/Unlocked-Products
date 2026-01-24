@@ -37,6 +37,13 @@
               </a>
             </div>
             <div class="hidden lg:flex items-center gap-2">
+              <!-- <a
+                routerLink="/"
+                routerLinkActive="bg-beige/80 text-chestnut"
+                class="relative px-8 py-3 rounded-xl hover:text-sky-400 transition"
+              >
+                Home
+              </a> -->
               <a
                 routerLink="/about"
                 routerLinkActive="bg-beige/80 text-chestnut"
@@ -114,7 +121,7 @@
                       >
                         <span class="text-sm font-medium text-slate-600">Active Users</span>
                         <span class="text-lg font-bold text-sky-600">
-                          {{ activityStats?.activeUsers?.[0]?.count || 0 }}
+                          {{ activityStats()?.activeUsers?.[0]?.count || 0 }}
                         </span>
                       </div>
 
@@ -123,7 +130,7 @@
                       >
                         <span class="text-sm font-medium text-slate-600">Total Visitors</span>
                         <span class="text-lg font-bold text-indigo-600">
-                          {{ activityStats?.totalUsers?.[0]?.count || 0 }}
+                          {{ activityStats()?.totalUsers?.[0]?.count || 0 }}
                         </span>
                       </div>
                     </div>
@@ -181,7 +188,7 @@
           </div>
           @if (isMenuOpen()) {
             <div
-              class="fixed w-70 py-4 inset-x-0 z-50 lg:hidden rounded-br-xl bg-secondary-50 backdrop-blur-xl border-b border-white/10 shadow-[0_40px_80px_rgba(0,0,0,0.6)] animate-[slideDown_0.25s_ease-out]"
+              class="fixed w-70 py-2 inset-x-0 z-50 lg:hidden rounded-br-xl bg-secondary-50 backdrop-blur-xl border-b border-white/10 shadow-[0_40px_80px_rgba(0,0,0,0.6)] animate-[slideDown_0.25s_ease-out]"
             >
               <!-- <a
               routerLink="/"
@@ -190,6 +197,20 @@
               (click)="isMenuOpen = false"
               >Home</a
             > -->
+              <!-- <div class="px-5 py-2 space-y-2 border-b border-black/10">
+                <div
+                  class="flex justify-between items-center rounded-xl bg-beige-light shadow-inner"
+                >
+                  <a
+                    routerLink="/"
+                    routerLinkActive="bg-white rounded text-chestnut!"
+                    (click)="this.isMenuOpen.set(false)"
+                    class="block w-full text-center px-6 py-3 text-tertiary rounded-xl text-lg font-medium"
+                  >
+                    Home
+                  </a>
+                </div>
+              </div> -->
               <div class="px-5 py-2 space-y-2 border-b border-black/10">
                 <div
                   class="flex justify-between items-center rounded-xl bg-beige-light shadow-inner"

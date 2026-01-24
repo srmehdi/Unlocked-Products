@@ -12,6 +12,6 @@ export class App {
   activity = inject(Activity);
   ngOnInit() {
     this.activity.startTracking();
-    this.activity.resetInactivityTimer();
+    // this.activity.resetInactivityTimer();
   }
 }
