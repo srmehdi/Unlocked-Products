@@ -10,10 +10,11 @@ import {
 import { StatusModal } from '../../shared/modals/status-modal/status-modal';
 import { Router, RouterLink } from '@angular/router';
 import { Http } from '../../core/services/http/http';
+import { Back } from '../../shared/directives/back/back';
 
 @Component({
   selector: 'app-forgot-password',
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, StatusModal, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule, StatusModal, RouterLink, Back],
   templateUrl: './forgot-password.html',
   styleUrl: './forgot-password.css',
 })

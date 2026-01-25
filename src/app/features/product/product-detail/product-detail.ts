@@ -13,11 +13,12 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { StatusModal } from '../../../shared/modals/status-modal/status-modal';
 import { Http } from '../../../core/services/http/http';
 import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
+import { Back } from '../../../shared/directives/back/back';
 
-type ZoomContent = { type: 'image'; src: string } | { type: 'video'; src: SafeResourceUrl };
+type ZoomContent = { type: 'image'; src: string[] } | { type: 'video'; src: SafeResourceUrl };
 @Component({
   selector: 'app-product-detail',
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, StatusModal],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule, StatusModal, Back],
   templateUrl: './product-detail.html',
   styleUrl: './product-detail.css',
 })
@@ -32,7 +33,7 @@ export class ProductDetail {
   state = inject(State);
   products = this.state.products();
   product = signal<Product | null>(null);
-
+  productId = signal<number | null>(null);
   experiences = signal<Experience[]>([]);
   experienceShared = signal<boolean>(false);
   user = this.state.user;
@@ -114,9 +115,9 @@ export class ProductDetail {
   //   this.zoomImage.set(src);
   //   document.body.style.overflow = 'hidden';
   // }
-  openImageZoom(src: string) {
-    this.zoomContent.set({ type: 'image', src });
-  }
+  // openImageZoom(src: string) {
+  //   this.zoomContent.set({ type: 'image', src });
+  // }
   openVideoZoom(youtubeUrl: string) {
     const embedUrl = this.getYoutubeEmbedUrl(youtubeUrl);
     console.log('embedUrl', embedUrl);
@@ -135,10 +136,43 @@ export class ProductDetail {
     const match = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]{11})/);
     return match ? `https://www.youtube.com/embed/${match[1]}?autoplay=1` : null;
   }
+  cardImageMap = new Map<number, number>();
+  cardImageIndex(productId: number): number {
+    return this.cardImageMap.get(productId) ?? 0;
+  }
+
+  // closeImageZoom() {
+  //   this.zoomImage.set(null);
+  //   document.body.style.overflow = '';
+  // }
+  zoomImages = signal<string[]>([]);
+  zoomIndex = signal(0);
+
+  openImageZoom(event: Event, images: string[], index = 0) {
+    this.zoomContent.set({ type: 'image', src: images });
+    event.stopPropagation();
+    this.zoomImages.set(images);
+    this.zoomIndex.set(index);
+  }
 
   closeImageZoom() {
-    this.zoomImage.set(null);
-    document.body.style.overflow = '';
+    this.zoomImages.set([]);
+    this.zoomIndex.set(0);
+  }
+  nextZoomImage() {
+    this.zoomIndex.update((i) => (i + 1) % this.zoomImages().length);
+  }
+
+  prevZoomImage() {
+    this.zoomIndex.update((i) => (i - 1 + this.zoomImages().length) % this.zoomImages().length);
+  }
+  @HostListener('window:keydown', ['$event'])
+  handleKeydown(event: KeyboardEvent) {
+    if (!this.zoomImages().length) return;
+
+    if (event.key === 'ArrowRight') this.nextZoomImage();
+    if (event.key === 'ArrowLeft') this.prevZoomImage();
+    if (event.key === 'Escape') this.closeImageZoom();
   }
   @HostListener('document:keydown.escape')
   onEsc() {
@@ -163,13 +197,32 @@ export class ProductDetail {
   }
 
   ngOnInit() {
-    this.activatedRoute.paramMap.subscribe((params) => {
-      const id = params.get('id') ? params.get('id') : 0;
-      const product = this.products?.find((p) => {
-        return p.id === +id!;
+    console.log('productId in state', this.state.productId());
+
+    if (!this.state.productId()) {
+      this.activatedRoute.paramMap.subscribe((params) => {
+        const id = params.get('id') ? params.get('id') : null;
+        // const product = this.products?.find((p) => {
+        //   return p.id === +id!;
+        // });
+        // this.product.set(product ? product : null);
+        this.productId.set(+id!);
+        this.state.setProductId(+id!);
       });
-      this.product.set(product ? product : null);
+    } else {
+      this.productId.set(this.state.productId()!);
+    }
+    const product = this.products?.find((p) => {
+      return p.id === this.productId();
     });
+    this.product.set(product ? product : null);
+    // this.activatedRoute.paramMap.subscribe((params) => {
+    //   const id = params.get('id') ? params.get('id') : 0;
+    //   const product = this.products?.find((p) => {
+    //     return p.id === +id!;
+    //   });
+    //   this.product.set(product ? product : null);
+    // });
     // this.fetchExperiences();
   }
   ngAfterViewInit() {
@@ -187,6 +240,9 @@ export class ProductDetail {
 
           if (resp?.length >= 0) {
             this.experiences.set(resp);
+            this.experiences.update((list) =>
+              list.map((exp) => ({ ...exp, helpful: 0, notHelpful: 0 })),
+            );
             const sharedExperience = resp.filter((exp: { mail: string | undefined }) => {
               return exp.mail === this.user()?.email;
             });
@@ -246,11 +302,34 @@ export class ProductDetail {
 
   onTouchEnd(event: TouchEvent) {
     const deltaX = event.changedTouches[0].screenX - this.touchStartX;
-    if (Math.abs(deltaX) > 50) {
+    if (Math.abs(deltaX) > 10) {
       deltaX > 0 ? this.prevImage() : this.nextImage();
     }
   }
+  private zoomTouchStartX = 0;
+  private zoomTouchEndX = 0;
 
+  private readonly SWIPE_THRESHOLD = 20;
+  onZoomTouchStart(event: TouchEvent) {
+    this.zoomTouchStartX = event.touches[0].clientX;
+  }
+
+  onZoomTouchEnd(event: TouchEvent) {
+    this.zoomTouchEndX = event.changedTouches[0].clientX;
+    this.handleZoomSwipe();
+  }
+
+  private handleZoomSwipe() {
+    const diff = this.zoomTouchStartX - this.zoomTouchEndX;
+
+    if (Math.abs(diff) < this.SWIPE_THRESHOLD) return;
+
+    if (diff > 0) {
+      this.nextZoomImage();
+    } else {
+      this.prevZoomImage();
+    }
+  }
   sortBy = signal<'recent' | 'longest' | 'helpful'>('recent');
   isOpen = signal(false);
 
@@ -276,7 +355,7 @@ export class ProductDetail {
       case 'longest':
         return list.sort((a, b) => b.monthsUsed - a.monthsUsed);
       case 'helpful':
-        return list.sort((a, b) => b.helpful - b.notHelpful - (a.helpful - a.notHelpful));
+        return list.sort((a, b) => b?.helpful! - b?.notHelpful! - (a?.helpful! - a?.notHelpful!));
       default:
         return list.sort(
           (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
@@ -285,8 +364,10 @@ export class ProductDetail {
   });
 
   vote(id: number, type: 'helpful' | 'notHelpful') {
+    console.log('vote', id, type, this.experiences());
+
     this.experiences.update((list) =>
-      list.map((exp) => (exp.id === id ? { ...exp, [type]: exp[type] + 1 } : exp)),
+      list.map((exp) => (exp.id === id ? { ...exp, [type]: exp[type]! + 1 } : exp)),
     );
   }
   formatTimeAgo(dateString: string): string {

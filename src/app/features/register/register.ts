@@ -12,10 +12,11 @@ import { StatusModal } from '../../shared/modals/status-modal/status-modal';
 import { Http } from '../../core/services/http/http';
 import { State } from '../../core/services/state/state';
 import { User } from '../../core/models/interface';
+import { Back } from '../../shared/directives/back/back';
 
 @Component({
   selector: 'app-register',
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, StatusModal, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule, StatusModal, RouterLink, Back],
   templateUrl: './register.html',
   styleUrl: './register.css',
 })

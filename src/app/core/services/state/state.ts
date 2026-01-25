@@ -29,6 +29,12 @@ export class State {
     this.storage.setProduct(products);
     this._product.set(products);
   }
+  private readonly _productId = signal<number | null>(this.storage.getProductId());
+  readonly productId = this._productId.asReadonly();
+  setProductId(productId: number | null) {
+    this.storage.setProductId(productId);
+    this._productId.set(productId);
+  }
   private readonly KEY = 'visitor_id';
   getVisitorId(): string {
     try {

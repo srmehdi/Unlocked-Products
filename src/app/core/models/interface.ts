@@ -30,8 +30,8 @@ export interface Experience {
   comment: string;
   monthsUsed: any;
   createdAt: Date;
-  helpful: number;
-  notHelpful: number;
+  helpful?: number;
+  notHelpful?: number;
 }
 export interface ProductPayload {
   productName: string;

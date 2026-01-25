@@ -94,7 +94,7 @@
               @if (popupOpen()) {
                 <div
                   #profilePopup
-                  class="absolute right-[-16px] pb-2 mt-3 w-70 rounded-bl-xl bg-secondary-50 shadow-[0_25px_60px_rgba(0,0,0,0.5)] border border-white/10 z-50 overflow-hidden animate-[fadeIn_0.15s_ease-out]"
+                  class="absolute right-[-16px] pb-2 mt-3 w-70 rounded-bl-xl bg-secondary-50 shadow-[0_25px_60px_rgba(0,0,0,0.5)] border border-white/10 z-100 overflow-hidden animate-[fadeIn_0.15s_ease-out]"
                 >
                   <div
                     class="px-5 py-4 border-b border-black/10 bg-gradient-to-r from-sky-50 to-beige-light"
@@ -188,7 +188,7 @@
           </div>
           @if (isMenuOpen()) {
             <div
-              class="fixed w-70 py-2 inset-x-0 z-50 lg:hidden rounded-br-xl bg-secondary-50 backdrop-blur-xl border-b border-white/10 shadow-[0_40px_80px_rgba(0,0,0,0.6)] animate-[slideDown_0.25s_ease-out]"
+              class="fixed w-70 py-2 inset-x-0 z-100 lg:hidden rounded-br-xl bg-secondary-50 backdrop-blur-xl border-b border-white/10 shadow-[0_40px_80px_rgba(0,0,0,0.6)] animate-[slideDown_0.25s_ease-out]"
             >
               <!-- <a
               routerLink="/"

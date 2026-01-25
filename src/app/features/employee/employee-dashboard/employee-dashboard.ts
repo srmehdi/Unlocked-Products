@@ -35,6 +35,10 @@ export class EmployeeDashboard {
   }
 
   toggleSummary(index: number) {
+    if (!this.isPaused) {
+      this.toggleAutoPlay();
+    }
+    this.resetCarouselInactivityTimer();
     const set = new Set(this.expandedSummaries());
     set.has(index) ? set.delete(index) : set.add(index);
     this.expandedSummaries.set(set);
@@ -63,9 +67,9 @@ export class EmployeeDashboard {
       : text.slice(0, this.REVIEW_LIMIT) + '…';
   }
 
-  next() {
-    this.activeIndex.update((i) => (i + 1) % this.products()?.length);
-  }
+  // next() {
+  //   this.activeIndex.update((i) => (i + 1) % this.products()?.length);
+  // }
   isPaused = false;
 
   toggleAutoPlay() {
@@ -102,9 +106,98 @@ export class EmployeeDashboard {
 
   onTouchEnd(event: TouchEvent, id: number, total: number) {
     const deltaX = event.changedTouches[0].screenX - this.touchStartX;
-    if (Math.abs(deltaX) > 50) {
+    if (Math.abs(deltaX) > 10) {
       deltaX > 0 ? this.prevCardImage(event, id, total) : this.nextCardImage(event, id, total);
     }
+  }
+  private zoomTouchStartX = 0;
+  private zoomTouchEndX = 0;
+
+  private readonly SWIPE_THRESHOLD = 20;
+  onZoomTouchStart(event: TouchEvent) {
+    this.zoomTouchStartX = event.touches[0].clientX;
+  }
+
+  onZoomTouchEnd(event: TouchEvent) {
+    this.zoomTouchEndX = event.changedTouches[0].clientX;
+    this.handleZoomSwipe();
+  }
+
+  private handleZoomSwipe() {
+    const diff = this.zoomTouchStartX - this.zoomTouchEndX;
+
+    if (Math.abs(diff) < this.SWIPE_THRESHOLD) return;
+
+    if (diff > 0) {
+      this.nextZoomImage();
+    } else {
+      this.prevZoomImage();
+    }
+  }
+  private carouselTouchStartX = 0;
+  private carouselTouchEndX = 0;
+
+  private carouselMouseDownX = 0;
+  private isDraggingCarousel = false;
+
+  private readonly CAROUSEL_SWIPE_THRESHOLD = 30;
+  onCarouselTouchStart(event: TouchEvent) {
+    this.carouselTouchStartX = event.touches[0].clientX;
+  }
+
+  onCarouselTouchEnd(event: TouchEvent) {
+    this.carouselTouchEndX = event.changedTouches[0].clientX;
+    this.handleCarouselSwipe();
+  }
+  onCarouselMouseDown(event: MouseEvent) {
+    this.isDraggingCarousel = true;
+    this.carouselMouseDownX = event.clientX;
+  }
+
+  onCarouselMouseUp(event: MouseEvent) {
+    if (!this.isDraggingCarousel) return;
+
+    const diff = this.carouselMouseDownX - event.clientX;
+    this.isDraggingCarousel = false;
+
+    this.processCarouselSwipe(diff);
+  }
+  private handleCarouselSwipe() {
+    const diff = this.carouselTouchStartX - this.carouselTouchEndX;
+    this.processCarouselSwipe(diff);
+  }
+
+  private processCarouselSwipe(diff: number) {
+    if (Math.abs(diff) < this.CAROUSEL_SWIPE_THRESHOLD) return;
+    if (!this.isPaused) {
+      this.toggleAutoPlay();
+    }
+    this.resetCarouselInactivityTimer();
+    if (diff > 0) {
+      this.next();
+    } else {
+      this.prev();
+    }
+  }
+  next() {
+    const total = this.topProducts().length;
+    this.activeIndex.set((this.activeIndex() + 1) % total);
+  }
+
+  prev() {
+    const total = this.topProducts().length;
+    this.activeIndex.set((this.activeIndex() - 1 + total) % total);
+  }
+  private inactivityTimer: any;
+  private readonly INACTIVITY_DELAY = 3000;
+  private resetCarouselInactivityTimer() {
+    clearTimeout(this.inactivityTimer);
+
+    this.inactivityTimer = setTimeout(() => {
+      if (this.isPaused) {
+        this.toggleAutoPlay();
+      }
+    }, this.INACTIVITY_DELAY);
   }
 
   goTo(index: number) {
@@ -119,7 +212,8 @@ export class EmployeeDashboard {
   ngOnInit() {
     setTimeout(() => {
       this.startAutoPlay();
-    }, 1200);
+    }, 4000);
+    this.state.setProductId(null);
   }
   startAutoPlay() {
     this.stopAutoPlay();
@@ -149,29 +243,82 @@ export class EmployeeDashboard {
   }
   zoomImage = signal<string | null>(null);
   searchTerm = signal('');
+  // filteredProducts = computed(() => {
+  //   const term = this.searchTerm().toLowerCase().trim();
+
+  //   if (!term) {
+  //     return this.products();
+  //   }
+
+  //   return this.products().filter(
+  //     (p) =>
+  //       p.productName?.toLowerCase().includes(term) ||
+  //       p.productSummary?.toLowerCase().includes(term),
+  //   );
+  // });
+  sortBy = signal<'rating' | 'name'>('name');
   filteredProducts = computed(() => {
+    let products = this.products();
+
     const term = this.searchTerm().toLowerCase().trim();
-
-    if (!term) {
-      return this.products();
+    if (term) {
+      products = products.filter((p) => p.productName.toLowerCase().includes(term));
     }
+    switch (this.sortBy()) {
+      case 'rating':
+        return [...products].sort((a, b) => (b.editorRating ?? 0) - (a.editorRating ?? 0));
 
-    return this.products().filter(
-      (p) =>
-        p.productName?.toLowerCase().includes(term) ||
-        p.productSummary?.toLowerCase().includes(term),
-    );
+      case 'name':
+        return [...products].sort((a, b) => a.productName.localeCompare(b.productName));
+
+      default:
+        return products;
+    }
   });
 
-  openImageZoom(event: MouseEvent, src: string | undefined) {
+  // openImageZoom(event: MouseEvent, src: string | undefined) {
+  //   event.stopPropagation();
+  //   if (!src) return;
+  //   this.zoomImage.set(src);
+  //   document.body.style.overflow = 'hidden';
+  // }
+  // closeImageZoom() {
+  //   this.zoomImage.set(null);
+  //   document.body.style.overflow = '';
+  // }
+  zoomImages = signal<string[]>([]);
+  zoomIndex = signal(0);
+
+  openImageZoom(event: Event, images: string[], index = 0) {
+    this.stopAutoPlay();
+    this.resetCarouselInactivityTimer();
     event.stopPropagation();
-    if (!src) return;
-    this.zoomImage.set(src);
-    document.body.style.overflow = 'hidden';
+    this.zoomImages.set(images);
+    this.zoomIndex.set(index);
   }
+
   closeImageZoom() {
-    this.zoomImage.set(null);
-    document.body.style.overflow = '';
+    if (!this.isPaused) {
+      this.toggleAutoPlay();
+    }
+    this.resetCarouselInactivityTimer();
+    this.zoomImages.set([]);
+    this.zoomIndex.set(0);
+  }
+  nextZoomImage() {
+    this.zoomIndex.update((i) => (i + 1) % this.zoomImages().length);
+  }
+
+  prevZoomImage() {
+    this.zoomIndex.update((i) => (i - 1 + this.zoomImages().length) % this.zoomImages().length);
+  }
+  @HostListener('window:keydown', ['$event'])
+  handleKeydown(event: KeyboardEvent) {
+    if (!this.zoomImages().length) return;
+
+    if (event.key === 'ArrowRight') this.nextZoomImage();
+    if (event.key === 'ArrowLeft') this.prevZoomImage();
+    if (event.key === 'Escape') this.closeImageZoom();
   }
   @HostListener('document:keydown.escape')
   onEsc() {

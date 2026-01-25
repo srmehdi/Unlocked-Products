@@ -1,5 +1,16 @@
 <section class="card flex items-center justify-center">
   <div class="w-full max-w-md bg-secondary-50 shadow-amber-950 shadow-2xl rounded-xl p-8">
+    <button
+      appBack
+      fallbackRoute="/"
+      class="fixed top-[80px] z-[99] inline-flex items-center justify-center gap-1 px-2 py-1 mt-0.5 rounded-lg bg-white/90 backdrop-blur-md shadow-xl hover:scale-105 active:scale-95 transition cursor-pointer animate-pulse"
+    >
+      <span class="text-lg font-bold leading-none flex items-center justify-center"> ← </span>
+
+      <span class="text-base font-bold leading-none flex items-center justify-center pr-2">
+        Back
+      </span>
+    </button>
     <h1 class="text-4xl font-bold text-center mb-6 text-secondary-100">Register</h1>
 
     <!-- <div class="flex justify-center mb-6">
@@ -7,83 +18,88 @@
     </div> -->
 
     @if (registered()) {
-    <div class="text-center">
-      <div class="text-green-500 text-lg font-semibold mb-2">Account Created</div>
-      <p class="text-sm text-slate-400 mb-6">You can now sign in with your credentials.</p>
+      <div class="text-center">
+        <div class="text-green-500 text-lg font-semibold mb-2">Account Created</div>
+        <p class="text-sm text-slate-400 mb-6">You can now sign in with your credentials.</p>
 
-      <a routerLink="/login" class="text-tertiary font-semibold hover:underline"> Go to Login </a>
-    </div>
+        <a routerLink="/login" class="text-tertiary font-semibold hover:underline"> Go to Login </a>
+      </div>
     } @else {
-    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-5">
-      <div>
-        <label class="block text-sm text-secondary-100 font-medium mb-2"> Full Name </label>
-        <input
-          type="text"
-          formControlName="name"
-          placeholder="John Doe"
-          class="w-full rounded-lg bg-white border px-4 py-3 text-tertiary placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500"
-        />
-        <p *ngIf="name.invalid && name.touched" class="text-sm text-red-600 mt-1">
-          Name is required.
-        </p>
-      </div>
-      <div>
-        <label class="block text-sm text-secondary-100 font-medium mb-2"> Email Address </label>
-        <input
-          type="email"
-          formControlName="email"
-          placeholder="you@example.com"
-          class="w-full rounded-lg bg-white border px-4 py-3 text-tertiary placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500"
-        />
-        <p *ngIf="email.invalid && email.touched" class="text-sm text-red-600 mt-1">
-          Enter a valid email.
-        </p>
-      </div>
-      <div>
-        <label class="block text-sm text-secondary-100 font-medium mb-2"> Password </label>
-        <input
-          type="password"
-          formControlName="password"
-          placeholder="••••••"
-          class="w-full rounded-lg bg-white border px-4 py-3 text-tertiary placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500"
-        />
-        <div
-          *ngIf="
-            this.registerForm.get('password')!.invalid &&
-            (this.registerForm.get('password')!.dirty || this.registerForm.get('password')!.touched)
-          "
-          class="text-sm text-red-600 mt-1"
-        >
-          <div *ngIf="this.registerForm.get('password')!.errors?.['required']">
-            Password is required.
-          </div>
-          <div *ngIf="this.registerForm.get('password')!.errors?.['minlength']">
-            Password must be at least 6 characters.
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-5">
+        <div>
+          <label class="block text-sm text-secondary-100 font-medium mb-2"> Full Name </label>
+          <input
+            type="text"
+            formControlName="name"
+            placeholder="John Doe"
+            class="w-full rounded-lg bg-white border px-4 py-3 text-tertiary placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500"
+          />
+          <p *ngIf="name.invalid && name.touched" class="text-sm text-red-600 mt-1">
+            Name is required.
+          </p>
+        </div>
+        <div>
+          <label class="block text-sm text-secondary-100 font-medium mb-2"> Email Address </label>
+          <input
+            type="email"
+            formControlName="email"
+            placeholder="you@example.com"
+            class="w-full rounded-lg bg-white border px-4 py-3 text-tertiary placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500"
+          />
+          <p *ngIf="email.invalid && email.touched" class="text-sm text-red-600 mt-1">
+            Enter a valid email.
+          </p>
+        </div>
+        <div>
+          <label class="block text-sm text-secondary-100 font-medium mb-2"> Password </label>
+          <input
+            type="password"
+            formControlName="password"
+            placeholder="••••••"
+            class="w-full rounded-lg bg-white border px-4 py-3 text-tertiary placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500"
+          />
+          <div
+            *ngIf="
+              this.registerForm.get('password')!.invalid &&
+              (this.registerForm.get('password')!.dirty ||
+                this.registerForm.get('password')!.touched)
+            "
+            class="text-sm text-red-600 mt-1"
+          >
+            <div *ngIf="this.registerForm.get('password')!.errors?.['required']">
+              Password is required.
+            </div>
+            <div *ngIf="this.registerForm.get('password')!.errors?.['minlength']">
+              Password must be at least 6 characters.
+            </div>
           </div>
         </div>
-      </div>
-      <div>
-        <label class="block text-sm text-secondary-100 font-medium mb-2"> Confirm Password </label>
-        <input
-          type="password"
-          formControlName="confirmPassword"
-          placeholder="••••••"
-          class="w-full rounded-lg bg-white border px-4 py-3 text-tertiary placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500"
-        />
-        <p *ngIf="passwordMismatch()" class="text-sm text-red-600 mt-1">Passwords do not match.</p>
-      </div>
-      <button
-        type="submit"
-        [disabled]="registerForm.invalid || passwordMismatch()"
-        class="w-full bg-tertiary enabled:hover:bg-sky-600 text-slate-100 font-semibold rounded-lg py-3 mb-6 transition cursor-not-allowed disabled:opacity-50 enabled:cursor-pointer"
-      >
-        Create Account
-      </button>
-      <p class="text-center text-sm text-secondary-100 mt-3">
-        Already have an account?
-        <a routerLink="/login" class="text-tertiary font-semibold hover:underline"> Login </a>
-      </p>
-    </form>
+        <div>
+          <label class="block text-sm text-secondary-100 font-medium mb-2">
+            Confirm Password
+          </label>
+          <input
+            type="password"
+            formControlName="confirmPassword"
+            placeholder="••••••"
+            class="w-full rounded-lg bg-white border px-4 py-3 text-tertiary placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500"
+          />
+          <p *ngIf="passwordMismatch()" class="text-sm text-red-600 mt-1">
+            Passwords do not match.
+          </p>
+        </div>
+        <button
+          type="submit"
+          [disabled]="registerForm.invalid || passwordMismatch()"
+          class="w-full bg-tertiary enabled:hover:bg-sky-600 text-slate-100 font-semibold rounded-lg py-3 mb-6 transition cursor-not-allowed disabled:opacity-50 enabled:cursor-pointer"
+        >
+          Create Account
+        </button>
+        <p class="text-center text-sm text-secondary-100 mt-3">
+          Already have an account?
+          <a routerLink="/login" class="text-tertiary font-semibold hover:underline"> Login </a>
+        </p>
+      </form>
     }
   </div>
 </section>

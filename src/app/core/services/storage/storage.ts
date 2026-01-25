@@ -31,12 +31,12 @@ export class Storage {
   removeProduct() {
     this.removeItem('product');
   }
-  setProductId(productId: number) {
-    return this.setItem('productId', productId);
+  setProductId(productId: number | null) {
+    return productId ? this.setItem('productId', productId) : this.removeProductId();
   }
   getProductId() {
     const result = this.getItem('productId');
-    return result ? JSON.parse(result) : [];
+    return result ? JSON.parse(result) : null;
   }
   removeProductId() {
     this.removeItem('productId');
