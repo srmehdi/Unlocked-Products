@@ -1,5 +1,39 @@
 <section class="card">
+  <!-- <button
+    appBack
+    fallbackRoute="/"
+    class="fixed top-[13vh] left-6 z-[1000] flex items-center gap-2 px-4 py-2 rounded-lg bg-white/90 backdrop-blur-md shadow-xl hover:scale-105 active:scale-95 transition cursor-pointer"
+  >
+    <span class="text-xl">←</span>
+    <span class="text-sm font-semibold hidden sm:block">Back</span>
+  </button> -->
   <div class="max-w-5xl mx-auto space-y-12">
+    <button
+      appBack
+      fallbackRoute="/"
+      class="fixed top-[80px] z-[99] inline-flex items-center justify-center gap-1 px-2 py-1 mt-0.5 rounded-lg bg-white/90 backdrop-blur-md shadow-xl hover:scale-105 active:scale-95 transition cursor-pointer animate-pulse"
+    >
+      <span class="text-lg font-bold leading-none flex items-center justify-center"> ← </span>
+
+      <span class="text-base font-bold leading-none flex items-center justify-center pr-2">
+        Back
+      </span>
+    </button>
+    <!-- <div class="flex items-center gap-3 mb-6">
+      <button
+        appBack
+        fallbackRoute="/"
+        class="group flex items-center gap-2 px-3 py-1 rounded-xl bg-beige-lighter hover:bg-beige-darker transition shadow-sm cursor-pointer"
+      >
+        <span class="text-lg transition-transform group-hover:-translate-x-1"> ← </span>
+        <span class="text-sm font-semibold text-tertiary"> Back </span>
+      </button>
+
+      <div class="h-6 w-px bg-black/10"></div>
+
+      <span class="text-sm text-slate-500 font-medium tracking-wide"> Product Details </span>
+    </div> -->
+
     <section class="grid mb-4 md:grid-cols-2 gap-8">
       <div
         class="relative rounded-2xl overflow-hidden bg-black shadow-xl"
@@ -15,10 +49,17 @@
         }  -->
         @if (product()?.imageBase64?.length) {
           <div class="relative group">
-            <img
+            <!-- <img
               [src]="product()?.imageBase64?.[activeImageIndex()]"
               class="h-[36vh] sm:h-[52vh] w-full object-contain rounded-2xl bg-black cursor-zoom-in pointer-events-auto relative z-10 shadow-[0_25px_60px_rgba(0,0,0,0.6)] hover:scale-[1.01] transition"
               (click)="openImageZoom(product()?.imageBase64?.[activeImageIndex()]!)"
+            /> -->
+            <img
+              [src]="product()?.imageBase64?.[activeImageIndex()]"
+              class="h-[36vh] sm:h-[52vh] w-full object-contain rounded-2xl bg-black cursor-zoom-in pointer-events-auto relative z-10 shadow-[0_25px_60px_rgba(0,0,0,0.6)] hover:scale-[1.01] transition"
+              (click)="
+                openImageZoom($event, product()?.imageBase64!, cardImageIndex(product()?.id!))
+              "
             />
             @if (product()?.imageBase64?.length! > 1) {
               <button
@@ -120,14 +161,28 @@
     </section>
 
     @if (sortedExperiences().length > 0) {
-      <div class="relative w-full sm:w-auto inline-block text-left">
+      <!-- <div class="relative w-full sm:w-auto inline-block text-left">
         <button
           type="button"
           (click)="isOpen.set(!isOpen())"
-          class="flex w-full sm:w-auto items-center justify-between gap-2 rounded-xl bg-tertiary px-4 py-2 text-slate-200 shadow-lg hover:bg-slate-700 transition cursor-pointer"
+          class="flex w-full sm:w-auto items-center justify-between gap-2 rounded-xl bg-tertiary pl-4 pr-10 py-2 text-slate-200 shadow-lg hover:bg-slate-700 transition cursor-pointer"
         >
           <span>Sort: {{ sortLabel() }}</span>
-          <span class="text-lg">▾</span>
+          <span class="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2">
+            <svg
+              class="h-4 w-4 text-slate-200"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </span>
         </button>
 
         <div
@@ -157,6 +212,42 @@
           >
             Most Helpful
           </button>
+        </div>
+      </div> -->
+      <div class="flex flex-col gap-4 mb-4 pt-0 sm:flex-row sm:items-center sm:justify-between">
+        <h2
+          class="text-2xl font-bold text-tertiary tracking-wider drop-shadow-[0_2px_4px_rgba(0,0,0,0.25)] text-center sm:text-left animate-bounce"
+        >
+          User Experiences
+        </h2>
+
+        <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+          <div class="relative w-full sm:max-w-xs">
+            <select
+              class="w-full appearance-none rounded-xl bg-beige-lighter border border-black/10 pl-4 pr-12 py-2 text-tertiary shadow-inner focus:outline-none focus:ring-2 focus:ring-sky-500 transition cursor-pointer"
+              (change)="sortBy.set($any($event.target).value)"
+            >
+              <option value="recent">Sort: Most Recent</option>
+              <option value="longest">Sort: Longest Use</option>
+              <option value="helpful">Sort: Most Helpful</option>
+            </select>
+
+            <span class="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2">
+              <svg
+                class="h-4 w-4 text-tertiary/70"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </span>
+          </div>
         </div>
       </div>
     }
@@ -193,25 +284,25 @@
 
             @if (exp?.comment?.length! > USER_REVIEW_LIMIT) {
               <button
-                class="text-xs font-semibold text-sky-400 hover:text-sky-500 transition cursor-pointer mb-4 animate-pulse"
+                class="text-xs font-semibold text-sky-400 hover:text-sky-500 transition cursor-pointer mb-2 animate-pulse"
                 (click)="toggleUserReview(exp?.id!)"
               >
                 {{ isUserReviewExpanded(exp?.id!) ? 'Show Less ↑' : 'Show More ↓' }}
               </button>
             }
 
-            <div class="flex justify-between items-center text-xs text-slate-200">
+            <div class="flex justify-between items-center text-xs text-slate-200 mt-2">
               <span class="italic"> Used for {{ exp.monthsUsed }} months </span>
 
               <div class="flex gap-4">
                 <button
-                  class="hover:text-green-400 transition cursor-pointer"
+                  class="hover:text-green-400 transition cursor-pointer animate-pulse"
                   (click)="vote(exp.id, 'helpful')"
                 >
                   👍 Helpful ({{ exp.helpful }})
                 </button>
                 <button
-                  class="hover:text-red-400 transition cursor-pointer"
+                  class="hover:text-red-400 transition cursor-pointer animate-pulse"
                   (click)="vote(exp.id, 'notHelpful')"
                 >
                   👎 Not Helpful ({{ exp.notHelpful }})
@@ -365,7 +456,7 @@
       </div>
     </div>
   } -->
-  @if (zoomContent()) {
+  <!-- @if (zoomContent()) {
     <div
       class="fixed inset-0 z-[999] flex items-center justify-center bg-black/80 backdrop-blur-sm"
       (click)="closeZoom()"
@@ -385,6 +476,70 @@
             [src]="zoomContent()?.src"
             class="max-h-[85vh] max-w-[85vw] object-contain rounded-sm shadow-[0_30px_100px_rgba(0,0,0,0.9)]"
           />
+        }
+        @if (zoomContent()?.type === 'video') {
+          <div
+            class="aspect-9/16 sm:aspect-video w-[90vw] sm:max-w-5xl max-h-[85vh] rounded-2xl overflow-hidden shadow-[0_30px_100px_rgba(0,0,0,0.9)] bg-black"
+          >
+            <iframe
+              [src]="zoomContent()?.src"
+              class="w-full h-full"
+              frameborder="0"
+              allow="autoplay; encrypted-media; picture-in-picture"
+              allowfullscreen
+            ></iframe>
+          </div>
+        }
+      </div>
+    </div>
+  } -->
+  @if (zoomContent()) {
+    <div
+      class="fixed inset-0 z-[999] flex items-center justify-center bg-black/80 backdrop-blur-sm"
+      (click)="closeZoom()"
+    >
+      <div
+        class="relative w-[90vw] h-[90vh] max-md:h-[70vh] touch-pan-y"
+        (click)="$event.stopPropagation()"
+        (touchstart)="onZoomTouchStart($event)"
+        (touchend)="onZoomTouchEnd($event)"
+      >
+        <button
+          class="absolute right-0 text-gray-900 font-extrabold animate-pulse px-3 text-xl rounded-sm hover:text-red-400 transition cursor-pointer bg-white"
+          (click)="closeZoom()"
+        >
+          ✕
+        </button>
+        @if (zoomContent()?.type === 'image') {
+          <img
+            [src]="zoomImages()[zoomIndex()]"
+            class="h-[86vh] max-md:h-[70vh] w-[90vw] object-contain rounded shadow-[0_40px_120px_rgba(0,0,0,0.9)]"
+          />
+          @if (zoomImages().length > 1) {
+            <button
+              class="absolute left-2 top-1/2 -translate-y-1/2 bg-black/60 text-white h-12 w-12 rounded-full hover:bg-sky-500 transition animate-pulse cursor-pointer"
+              (click)="prevZoomImage()"
+            >
+              ‹
+            </button>
+            <button
+              class="absolute right-2 top-1/2 -translate-y-1/2 bg-black/60 text-white h-12 w-12 rounded-full hover:bg-sky-500 transition animate-pulse cursor-pointer"
+              (click)="nextZoomImage()"
+            >
+              ›
+            </button>
+          }
+          <div class="flex justify-center gap-2 mt-4">
+            @for (img of zoomImages(); track $index) {
+              <button
+                class="h-2.5 w-2.5 rounded-full transition"
+                [class.cursor-pointer]="$index !== zoomIndex()"
+                [class.bg-white]="$index === zoomIndex()"
+                [class.bg-white/40]="$index !== zoomIndex()"
+                (click)="zoomIndex.set($index)"
+              ></button>
+            }
+          </div>
         }
         @if (zoomContent()?.type === 'video') {
           <div

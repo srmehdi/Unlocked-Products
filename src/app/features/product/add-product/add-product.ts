@@ -13,10 +13,11 @@ import { ProductPayload } from '../../../core/models/interface';
 import { Http } from '../../../core/services/http/http';
 import { Router } from '@angular/router';
 import { Storage } from '../../../core/services/storage/storage';
+import { Back } from '../../../shared/directives/back/back';
 
 @Component({
   selector: 'app-add-product',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, StatusModal],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, StatusModal, Back],
   templateUrl: './add-product.html',
   styleUrl: './add-product.css',
 })

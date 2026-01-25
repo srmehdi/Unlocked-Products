@@ -15,10 +15,11 @@ import { HttpResponse, User } from '../../core/models/interface';
 import { Http } from '../../core/services/http/http';
 import { StatusModal } from '../../shared/modals/status-modal/status-modal';
 import { State } from '../../core/services/state/state';
+import { Back } from '../../shared/directives/back/back';
 
 @Component({
   selector: 'app-login',
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, StatusModal, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule, StatusModal, RouterLink, Back],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
@@ -31,7 +32,7 @@ export class Login implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private storage: Storage,
-    private api: Http
+    private api: Http,
   ) {}
 
   ngOnInit(): void {
@@ -39,10 +40,10 @@ export class Login implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
     });
-    if (this.products!?.length > 0) {
-      this.storage.removeProduct();
-      this.state.setProduct([]);
-    }
+    // if (this.products!?.length > 0) {
+    //   this.storage.removeProduct();
+    //   this.state.setProduct([]);
+    // }
   }
 
   get email(): AbstractControl {

@@ -18,7 +18,7 @@ export const routes: Routes = [
             path: '',
             loadComponent: () =>
               import('./features/employee/employee-dashboard/employee-dashboard').then(
-                (c) => c.EmployeeDashboard
+                (c) => c.EmployeeDashboard,
               ),
           },
         ],
