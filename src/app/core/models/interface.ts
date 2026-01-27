@@ -14,7 +14,8 @@ export interface Product {
   productSummary: string;
   userRating: number;
   totalUsersRated: number;
-  category: number;
+  category: string;
+  subCategory: string;
   editorReview: string;
   editorRating: number;
   imageBase64: string[];
@@ -40,6 +41,8 @@ export interface ProductPayload {
   editorReview: string;
   editorRating: number;
   imageBase64: string[];
+  category: string;
+  subCategory: string;
 }
 export interface ProductExperience {
   id?: number;
@@ -56,3 +59,18 @@ export interface HttpResponse<T> {
 }
 
 export type ZoomContent = { type: 'image'; src: string } | { type: 'video'; src: SafeResourceUrl };
+
+// export interface Category {
+//   id: number;
+//   name: string;
+//   slug: string;
+// }
+export interface Category {
+  name: string;
+  slug: string;
+  icon?: string;
+  subcategories?: {
+    name: string;
+    slug: string;
+  }[];
+}

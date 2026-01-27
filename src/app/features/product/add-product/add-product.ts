@@ -32,6 +32,9 @@ export class AddProduct {
   fb = inject(FormBuilder);
   api = inject(Http);
   storage = inject(Storage);
+  categories = this.state.categories.filter((category) => {
+    return category.slug !== 'all';
+  });
   ngOnInit() {
     this.createAddProductForm();
   }
@@ -43,8 +46,34 @@ export class AddProduct {
       editorReview: ['', [Validators.required]],
       // editorRating: ['', [Validators.required]],
       rating: [null, [Validators.required, Validators.min(1), Validators.max(5)]],
+      category: ['', Validators.required],
+      subcategory: [{ value: '', disabled: true }, Validators.required],
     });
   }
+  selectedSubcategories(): { name: string; slug: string }[] {
+    const catSlug = this.addProductForm.get('category')?.value;
+    const category = this.categories.find((c) => c.slug === catSlug);
+    return category?.subcategories ?? [];
+  }
+  onCategoryChange(catSlug: string) {
+    const subCtrl = this.addProductForm.get('subcategory');
+
+    if (!catSlug) {
+      subCtrl?.reset();
+      subCtrl?.disable();
+      return;
+    }
+
+    const category = this.categories.find((c) => c.slug === catSlug);
+
+    if (category?.subcategories?.length) {
+      subCtrl?.enable();
+    } else {
+      subCtrl?.reset();
+      subCtrl?.disable();
+    }
+  }
+
   onImagesUpload(event: Event) {
     const MAX_FILE_SIZE = 200 * 1024;
     const MAX_FILES = 3;
@@ -102,6 +131,8 @@ export class AddProduct {
         editorRating: this.addProductForm.get('rating')?.value,
         editorReview: this.addProductForm.get('editorReview')?.value,
         imageBase64: this.images(),
+        category: this.addProductForm.get('category')?.value,
+        subCategory: this.addProductForm.get('subcategory')?.value,
       };
       this.api.addProducts(payload).subscribe({
         next: (product) => {

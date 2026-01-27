@@ -54,4 +54,53 @@ export class State {
       return crypto.randomUUID();
     }
   }
+  categories = [
+    {
+      name: 'All',
+      slug: 'all',
+    },
+    {
+      name: 'Smartphones',
+      slug: 'smartphones',
+      subcategories: [
+        { name: 'Android Phones', slug: 'android' },
+        { name: 'iPhones', slug: 'iphone' },
+      ],
+    },
+    {
+      name: 'Laptops',
+      slug: 'laptops',
+      subcategories: [
+        { name: 'Notebooks', slug: 'notebooks' },
+        { name: 'Ultrabooks', slug: 'ultrabooks' },
+        { name: 'Gaming', slug: 'gaming' },
+      ],
+    },
+    {
+      name: 'Headphones',
+      slug: 'headphones',
+      subcategories: [
+        { name: 'Wireless', slug: 'wireless' },
+        { name: 'Wired', slug: 'wired' },
+      ],
+    },
+    {
+      name: 'Wearables',
+      slug: 'wearables',
+      subcategories: [
+        { name: 'Smartwatches', slug: 'smartwatch' },
+        { name: 'Fitness Bands', slug: 'fitness-band' },
+      ],
+    },
+    {
+      name: 'Beauty Products',
+      slug: 'beauty',
+      subcategories: [
+        { name: 'Skincare', slug: 'skincare' },
+        { name: 'Makeup', slug: 'makeup' },
+        { name: 'Hair Care', slug: 'hair-care' },
+        { name: 'Fragrances', slug: 'fragrance' },
+      ],
+    },
+  ];
 }

@@ -4,12 +4,14 @@ import { Product, User } from '../../../core/models/interface';
 import { Http } from '../../../core/services/http/http';
 import { Subject } from 'rxjs';
 import { StatusModal } from '../../../shared/modals/status-modal/status-modal';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { State } from '../../../core/services/state/state';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-employee-dashboard',
-  imports: [StatusModal],
+  imports: [StatusModal, CommonModule, FormsModule],
   templateUrl: './employee-dashboard.html',
   styleUrl: './employee-dashboard.css',
 })
@@ -209,17 +211,24 @@ export class EmployeeDashboard {
   }
   state = inject(State);
   user = this.state.user();
+  route = inject(ActivatedRoute);
   ngOnInit() {
     setTimeout(() => {
       this.startAutoPlay();
     }, 4000);
     this.state.setProductId(null);
+    this.route.queryParamMap.subscribe((params) => {
+      const cat = params.get('cat');
+      const sub = params.get('sub');
+      cat ? this.activeCategory.set(cat!) : '';
+      sub ? this.activeSubCategory.set(sub!) : '';
+    });
   }
   startAutoPlay() {
     this.stopAutoPlay();
 
     this.autoPlayInterval = setInterval(() => {
-      const total = this.products().length;
+      const total = this.topProducts().length;
       if (!total) return;
 
       this.activeIndex.set((this.activeIndex() + 1) % total);
@@ -257,25 +266,126 @@ export class EmployeeDashboard {
   //   );
   // });
   sortBy = signal<'rating' | 'name'>('name');
-  filteredProducts = computed(() => {
-    let products = this.products();
+  // filteredProducts = computed(() => {
+  //   let products = this.products();
 
-    const term = this.searchTerm().toLowerCase().trim();
-    if (term) {
-      products = products.filter((p) => p.productName.toLowerCase().includes(term));
+  //   const term = this.searchTerm().toLowerCase().trim();
+  //   if (term) {
+  //     products = products.filter((p) => p.productName.toLowerCase().includes(term));
+  //   }
+  //   switch (this.sortBy()) {
+  //     case 'rating':
+  //       return [...products].sort((a, b) => (b.editorRating ?? 0) - (a.editorRating ?? 0));
+
+  //     case 'name':
+  //       return [...products].sort((a, b) => a.productName.localeCompare(b.productName));
+
+  //     default:
+  //       return products;
+  //   }
+  // });
+  // categories = signal([
+  //   { id: 0, name: 'All', slug: 'all' },
+  //   { id: 1, name: 'Smartphones', slug: 'smartphones' },
+  //   { id: 2, name: 'Laptops', slug: 'laptops' },
+  //   { id: 3, name: 'Headphones', slug: 'headphones' },
+  //   { id: 4, name: 'Wearables', slug: 'wearables' },
+  // ]);
+  categories = this.state.categories;
+
+  // activeCategory = signal('all');
+  activeCategory = signal<string>('all');
+  activeSubCategory = signal<string | null>(null);
+
+  // searchTerm = signal('');
+  // sortBy = signal<'name' | 'rating'>('name');
+  // products = signal<any[]>([]);
+
+  filteredProducts = computed(() => {
+    let list = [...this.products()];
+
+    if (this.activeCategory() !== 'all') {
+      list = list.filter((p) => {
+        if (this.activeCategory() && p.category !== this.activeCategory()) {
+          return false;
+        }
+
+        if (this.activeSubCategory() && p.subCategory !== this.activeSubCategory()) {
+          return false;
+        }
+
+        return true;
+      });
     }
+    if (this.searchTerm().trim()) {
+      const q = this.searchTerm().toLowerCase();
+      list = list.filter((p) => p.productName.toLowerCase().includes(q));
+    }
+
     switch (this.sortBy()) {
       case 'rating':
-        return [...products].sort((a, b) => (b.editorRating ?? 0) - (a.editorRating ?? 0));
+        return list.sort((a, b) => b.editorRating - a.editorRating);
 
       case 'name':
-        return [...products].sort((a, b) => a.productName.localeCompare(b.productName));
+        return list.sort((a, b) => a.productName.localeCompare(b.productName));
 
       default:
-        return products;
+        return list;
     }
+
+    return list;
+  });
+  getActiveCategory() {
+    return this.categories.find((c) => c.slug === this.activeCategory());
+  }
+  activeSubCategoryObj = computed(() => {
+    const subSlug = this.activeSubCategory();
+    if (!subSlug) return null;
+
+    for (const cat of this.categories) {
+      const found = cat.subcategories?.find((sub) => sub.slug === subSlug);
+      if (found) {
+        return {
+          category: cat,
+          subcategory: found,
+        };
+      }
+    }
+
+    return null;
   });
 
+  selectCategory(catSlug: string) {
+    this.activeCategory.set(catSlug);
+    this.activeSubCategory.set(null);
+    // this.getActiveCategory()?.name! === 'All'
+    //   ? this.getProductBreadCrumb.set('All Products')
+    //   : this.getProductBreadCrumb.set(this.getActiveCategory()?.name!);
+
+    this.router.navigate([], {
+      queryParams: { cat: catSlug, sub: null },
+      queryParamsHandling: 'merge',
+    });
+  }
+  selectSubCategory(subSlug: string) {
+    this.activeSubCategory.set(subSlug);
+    // this.getActiveCategory()?.name! === 'All'
+    //   ? this.getProductBreadCrumb.set('All Products')
+    //   : this.getProductBreadCrumb.set(
+    //       this.activeSubCategoryObj()?.category.name +
+    //         ' › ' +
+    //         this.activeSubCategoryObj()?.subcategory.name,
+    //     );
+
+    this.router.navigate([], {
+      queryParams: {
+        cat: this.activeCategory(),
+        sub: subSlug,
+      },
+      queryParamsHandling: 'merge',
+    });
+  }
+  getProductBreadCrumb = signal<string>('All Products');
   // openImageZoom(event: MouseEvent, src: string | undefined) {
   //   event.stopPropagation();
   //   if (!src) return;
