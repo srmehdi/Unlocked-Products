@@ -25,18 +25,36 @@
   animation: carousel 25s infinite ease-in-out;
 }
 
-/* Dot base */
 .dot {
   width: 10px;
   height: 10px;
   border-radius: 9999px;
-  background: #9c8062; /* slate-600 */
+  background: #9c8062;
   cursor: pointer;
   transition: all 0.3s ease;
 }
-
-/* Active dot */
 .dot-active {
-  background: #38bdf8; /* sky-400 */
+  background: #38bdf8;
   transform: scale(1.4);
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.animate-fade-in {
+  animation: fadeSlide 0.2s ease-out;
+}
+
+@keyframes fadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

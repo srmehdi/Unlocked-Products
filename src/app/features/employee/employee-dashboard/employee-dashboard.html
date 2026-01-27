@@ -40,7 +40,7 @@
           >
             @for (product of topProducts(); track $index) {
               <div
-                class="w-full px-10 pt-10 max-sm:pt-6 max-sm:px-6 pb-5 flex flex-col h-full text-center space-y-4"
+                class="w-full h-auto px-10 pt-10 max-sm:pt-6 max-sm:px-6 pb-4 flex flex-col text-center space-y-4"
               >
                 @if (product?.imageBase64?.length) {
                   <img
@@ -53,7 +53,7 @@
                 } @else {
                   <img
                     src="./../../../../assets/images/placeholder_product_dark.svg"
-                    class="h-[24vh] sm:h-[52vh] w-full object-contain rounded-2xl bg-black"
+                    class="h-[24vh] sm:h-[46vh] w-full object-contain rounded-2xl bg-black"
                   />
                 }
                 <h1 class="text-2xl sm:text-3xl font-bold text-tertiary tracking-wide">
@@ -98,12 +98,21 @@
                 </button>
               } -->
 
-                <div class="text-yellow-400 text-lg font-semibold">
+                <!-- <div class="text-yellow-400 text-lg font-semibold">
                   {{ product.editorRating }} ★
-                </div>
+                </div> -->
                 <div class="mt-auto">
-                  <button
+                  <div class="text-yellow-400 text-lg font-semibold">
+                    {{ product.editorRating }} ★
+                  </div>
+                  <!-- <button
                     class="mx-auto block px-8 py-2 rounded-xl bg-tertiary text-white text-sm font-semibold hover:bg-tertiary/90 transition shadow-lg cursor-pointer"
+                    (click)="navigateToProductPage(product); $event.stopPropagation()"
+                  >
+                    View Details →
+                  </button> -->
+                  <button
+                    class="mx-auto w-full md:w-80 block px-8 py-2 rounded-xl bg-white text-tertiary border-black/10 text-sm font-semibold shadow-lg transition-all duration-300 border hover:scale-105 cursor-pointer"
                     (click)="navigateToProductPage(product); $event.stopPropagation()"
                   >
                     View Details →
@@ -115,10 +124,10 @@
           <div class="flex items-center justify-center gap-4 pb-4">
             <button
               (click)="toggleAutoPlay()"
-              class="h-10 w-10 rounded-full flex items-center justify-center bg-beige-lighter border border-black/10 shadow-lg hover:bg-tertiary hover:text-white transition cursor-pointer"
+              class="h-8 w-8 rounded-full flex items-center justify-center bg-beige-lighter border border-black/10 shadow-lg hover:bg-tertiary hover:text-white transition cursor-pointer"
               [attr.aria-label]="isPaused ? 'Play carousel' : 'Pause carousel'"
             >
-              <span class="text-lg">
+              <span class="text-sm">
                 {{ isPaused ? '▶' : '❚❚' }}
               </span>
             </button>
@@ -160,19 +169,131 @@
         </span>
       </div>
     </div> -->
+
+    <!-- <div
+      class="sticky top-[88px] z-30 bg-beige-darker/90 backdrop-blur-xl border-b border-black/10 rounded-xl"
+    >
+      <div class="flex gap-3 overflow-x-auto px-4 py-4 scrollbar-hide">
+        @for (cat of categories; track cat.slug) {
+          <div class="relative">
+            <button
+              (click)="activeCategory.set(cat.slug); activeSubCategory.set(null)"
+              class="relative px-5 py-2.5 rounded-xl whitespace-nowrap text-sm font-semibold transition-all duration-300 border shadow-sm hover:scale-105 cursor-pointer"
+              [class.bg-tertiary]="activeCategory() === cat.slug"
+              [class.text-white]="activeCategory() === cat.slug"
+              [class.border-tertiary]="activeCategory() === cat.slug"
+              [class.shadow-lg]="activeCategory() === cat.slug"
+              [class.bg-white]="activeCategory() !== cat.slug"
+              [class.text-tertiary]="activeCategory() !== cat.slug"
+              [class.border-black/10]="activeCategory() !== cat.slug"
+            >
+              {{ cat.name }}
+
+              @if (activeCategory() === cat.slug) {
+                <span
+                  class="absolute -bottom-1 left-1/2 -translate-x-1/2 h-1 w-6 rounded-full bg-sky-400 animate-pulse"
+                ></span>
+              }
+            </button>
+            @if (activeCategory() === cat.slug && cat.subcategories?.length) {
+              <div
+                class="absolute left-1/2 -translate-x-1/2 mt-3 z-40 bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.25)] border border-black/10 p-3 flex gap-2 animate-fade-in"
+              >
+                @for (sub of cat.subcategories; track sub.slug) {
+                  <button
+                    (click)="activeSubCategory.set(sub.slug)"
+                    class="px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition cursor-pointer"
+                    [class.bg-sky-500]="activeSubCategory() === sub.slug"
+                    [class.text-white]="activeSubCategory() === sub.slug"
+                    [class.bg-sky-50]="activeSubCategory() !== sub.slug"
+                    [class.text-tertiary]="activeSubCategory() !== sub.slug"
+                    [class.hover:bg-sky-100]="activeSubCategory() !== sub.slug"
+                  >
+                    {{ sub.name }}
+                  </button>
+                }
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div> -->
+
+    <div
+      class="sticky top-[74px] z-30 bg-beige-darker/60 backdrop-blur-xs border-b border-black/10 rounded-xl mb-4"
+    >
+      <div class="flex gap-4 overflow-x-auto px-4 py-3 scrollbar-hide items-start">
+        @for (cat of categories; track cat.slug) {
+          <div class="flex flex-col items-center shrink-0">
+            <button
+              (click)="selectCategory(cat.slug)"
+              class="relative px-5 py-1.5 rounded-xl whitespace-nowrap text-sm font-semibold transition-all duration-300 border shadow-sm hover:scale-105 cursor-pointer"
+              [class.bg-tertiary]="activeCategory() === cat.slug"
+              [class.text-white]="activeCategory() === cat.slug"
+              [class.border-tertiary]="activeCategory() === cat.slug"
+              [class.shadow-lg]="activeCategory() === cat.slug"
+              [class.bg-white]="activeCategory() !== cat.slug"
+              [class.text-tertiary]="activeCategory() !== cat.slug"
+              [class.border-black/10]="activeCategory() !== cat.slug"
+            >
+              {{ cat.name }}
+
+              @if (activeCategory() === cat.slug) {
+                <span
+                  class="absolute -bottom-1 left-1/2 -translate-x-1/2 h-1 w-6 rounded-full bg-sky-400 animate-pulse"
+                ></span>
+              }
+            </button>
+            @if (activeCategory() === cat.slug && cat.subcategories?.length) {
+              <div class="mt-1.5 flex flex-row gap-2 w-full animate-fade-in">
+                @for (sub of cat.subcategories; track sub.slug) {
+                  <button
+                    (click)="selectSubCategory(sub.slug)"
+                    class="px-4 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer text-left"
+                    [class.bg-sky-400]="activeSubCategory() === sub.slug"
+                    [class.text-white]="activeSubCategory() === sub.slug"
+                    [class.bg-white]="activeSubCategory() !== sub.slug"
+                    [class.text-tertiary]="activeSubCategory() !== sub.slug"
+                    [class.border]="true"
+                    [class.border-black/10]="activeSubCategory() !== sub.slug"
+                    [class.shadow-sm]="activeSubCategory() === sub.slug"
+                    [class.hover:bg-sky-50]="activeSubCategory() !== sub.slug"
+                  >
+                    {{ sub.name }}
+                  </button>
+                }
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+
     <div class="flex flex-col gap-4 mb-4 pt-0 sm:flex-row sm:items-center sm:justify-between">
       <h2
-        class="text-2xl font-bold text-tertiary tracking-wider drop-shadow-[0_2px_4px_rgba(0,0,0,0.25)] text-center sm:text-left animate-bounce"
+        class="text-2xl font-bold text-tertiary tracking-wider drop-shadow-[0_2px_4px_rgba(0,0,0,0.25)] text-left"
       >
-        All Products
+        @if (this.getActiveCategory()?.name! === 'All') {
+          All Products
+        } @else {
+          @if (!activeSubCategoryObj()) {
+            {{ this.getActiveCategory()?.name }}
+          } @else {
+            {{ this.getActiveCategory()?.name }}
+            ›
+            <span class="text-xl text-sky-400">{{
+              this.activeSubCategoryObj()?.subcategory?.name
+            }}</span>
+          }
+        }
       </h2>
 
-      <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+      <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto text-sm">
         <div class="relative w-full sm:max-w-xs">
           <input
             type="text"
-            placeholder="Search products..."
-            class="w-full rounded-xl bg-beige-lighter border border-black/10 px-4 py-2 pr-10 text-tertiary shadow-inner focus:outline-none focus:ring-2 focus:ring-sky-500 transition"
+            placeholder="Search Products..."
+            class="w-full rounded-xl bg-beige-lighter border-2 border-black/10 px-4 py-2 pr-10 text-tertiary shadow-inner focus:outline-none focus:ring-2 focus:ring-sky-500 transition"
             (input)="searchTerm.set($any($event.target).value)"
           />
           <span
@@ -182,9 +303,9 @@
           </span>
         </div>
 
-        <div class="relative w-full sm:max-w-xs">
+        <div class="relative w-full sm:max-w-xs text-sm">
           <select
-            class="w-full appearance-none rounded-xl bg-beige-lighter border border-black/10 pl-4 pr-12 py-2 text-tertiary shadow-inner focus:outline-none focus:ring-2 focus:ring-sky-500 transition cursor-pointer"
+            class="w-full appearance-none rounded-xl bg-beige-lighter border-2 border-black/10 pl-4 pr-12 py-2 text-tertiary shadow-inner focus:outline-none focus:ring-2 focus:ring-sky-500 transition cursor-pointer"
             (change)="sortBy.set($any($event.target).value)"
           >
             <option value="name">Sort: Name (A-Z)</option>
@@ -300,19 +421,28 @@
               </div>
             }
 
-            <div class="text-yellow-400 font-semibold my-1">{{ product.editorRating }} ★</div>
+            <!-- <div class="text-yellow-400 font-semibold my-1">{{ product.editorRating }} ★</div> -->
 
-            <button
+            <!-- <button
               class="mt-auto w-full rounded-xl bg-tertiary text-white py-2 text-sm font-semibold hover:bg-tertiary/90 transition shadow-md cursor-pointer"
               (click)="navigateToProductPage(product)"
             >
               View Details →
-            </button>
+            </button> -->
+            <div class="mt-auto">
+              <div class="text-yellow-400 font-semibold my-1">{{ product.editorRating }} ★</div>
+              <button
+                class="mx-auto w-full block px-8 py-2 rounded-xl bg-white text-tertiary border-black/10 text-sm font-semibold shadow-lg transition-all duration-300 border hover:scale-105 cursor-pointer"
+                (click)="navigateToProductPage(product)"
+              >
+                View Details →
+              </button>
+            </div>
           </div>
         }
       </div>
     } @else {
-      <div class="text-center text-tertiary/70 text-lg py-12">No products match your search.</div>
+      <div class="text-center text-tertiary/70 text-lg py-12">No products found.</div>
     }
   </div>
   <!-- @if (zoomImage()) {
