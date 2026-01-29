@@ -32,6 +32,11 @@ export class EmployeeDashboard {
     private http: Http,
     private router: Router,
   ) {}
+  getStarFill(rating: number, starIndex: number): number {
+    const fill = Math.min(Math.max(rating - (starIndex - 1), 0), 1);
+    return fill * 100;
+  }
+
   isSummaryExpanded(index: number): boolean {
     return this.expandedSummaries().has(index);
   }
@@ -51,6 +56,13 @@ export class EmployeeDashboard {
     return this.isSummaryExpanded(index) || text.length <= this.SUMMARY_LIMIT
       ? text
       : text.slice(0, this.SUMMARY_LIMIT) + '…';
+  }
+  VAROUSEL_SUMMARY_LIMIT = 140;
+  getCarouselSummary(text: string, index: number): string {
+    if (!text) return '';
+    return text.length <= this.VAROUSEL_SUMMARY_LIMIT
+      ? text
+      : text.slice(0, this.VAROUSEL_SUMMARY_LIMIT) + '…';
   }
   isReviewExpanded(index: number): boolean {
     return this.expandedEditorReviews().has(index);
