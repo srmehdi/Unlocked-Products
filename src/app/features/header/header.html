@@ -115,7 +115,7 @@
                     </div>
                   </div>
                   @if (user()?.role?.includes(roles.ADMIN)) {
-                    <div class="px-5 py-2 space-y-2 border-b border-black/10">
+                    <div class="px-5 py-1 space-y-1 border-b border-black/10">
                       <div
                         class="flex justify-between items-center rounded-xl bg-beige-light px-4 py-2 shadow-inner"
                       >
@@ -138,13 +138,13 @@
 
                   <div class="divide-y divide-black/10">
                     @if (!user()?.name) {
-                      <div class="px-5 py-2 space-y-2 border-b border-black/10">
+                      <div class="px-5 py-1 space-y-1 border-b border-black/10">
                         <div
                           class="flex justify-between items-center rounded-xl bg-beige-light shadow-inner"
                         >
                           <a
                             routerLink="/login"
-                            routerLinkActive="bg-white rounded-xl text-chestnut! pointer-events-none!"
+                            routerLinkActive="bg-white m-2 rounded-xl text-chestnut! pointer-events-none!"
                             (click)="closePopup()"
                             class="block w-full text-center px-6 py-3 text-tertiary hover:bg-beige-light hover:text-sky-400 hover:bg-red-50 hover:rounded-xl"
                           >
@@ -153,22 +153,22 @@
                         </div>
                       </div>
 
-                      <div class="px-5 py-2 space-y-2 border-b border-black/10">
+                      <div class="px-5 py-1 space-y-1 border-b border-black/10">
                         <div
                           class="flex justify-between items-center rounded-xl bg-beige-light shadow-inner"
                         >
                           <a
                             routerLink="/register"
-                            routerLinkActive="bg-white rounded-xl text-chestnut! pointer-events-none!"
+                            routerLinkActive="bg-white m-2 rounded-xl text-chestnut! pointer-events-none!"
                             (click)="closePopup()"
-                            class="block w-full text-center px-6 py-3 text-tertiary hover:bg-beige-light hover:text-sky-400 hover:bg-red-50 hover:rounded-xl"
+                            class="block w-full text-center px-6 py-2 sm:py-3 text-tertiary hover:bg-beige-light hover:text-sky-400 hover:bg-red-50 hover:rounded-xl"
                           >
                             Register
                           </a>
                         </div>
                       </div>
                     } @else {
-                      <div class="px-5 pt-2 pb-4 space-y-3 border-b border-black/10">
+                      <div class="px-5 pt-2 pb-2 space-y-1 sm:space-y-3 border-b border-black/10">
                         <div
                           class="flex justify-between items-center rounded-xl bg-beige-light shadow-inner"
                         >
@@ -188,7 +188,7 @@
           </div>
           @if (isMenuOpen()) {
             <div
-              class="fixed w-70 py-2 inset-x-0 z-100 lg:hidden rounded-br-xl bg-secondary-50 backdrop-blur-xl border-b border-white/10 shadow-[0_40px_80px_rgba(0,0,0,0.6)] animate-[slideDown_0.25s_ease-out]"
+              class="fixed w-60 py-1 inset-x-0 z-100 lg:hidden rounded-br-xl bg-secondary-50 backdrop-blur-xl border-b border-white/10 shadow-[0_40px_80px_rgba(0,0,0,0.6)] animate-[slideDown_0.25s_ease-out]"
             >
               <!-- <a
               routerLink="/"
@@ -211,7 +211,7 @@
                   </a>
                 </div>
               </div> -->
-              <div class="px-5 py-2 space-y-2 border-b border-black/10">
+              <div class="px-5 py-1 space-y-1 border-b border-black/10">
                 <div
                   class="flex justify-between items-center rounded-xl bg-beige-light shadow-inner"
                 >
@@ -219,7 +219,7 @@
                     routerLink="/about"
                     routerLinkActive="bg-white rounded text-chestnut!"
                     (click)="this.isMenuOpen.set(false)"
-                    class="block w-full text-center px-6 py-3 text-tertiary rounded-xl text-lg font-medium"
+                    class="block w-full text-center px-4 py-2 text-tertiary rounded-xl text-lg font-medium"
                   >
                     About
                   </a>
@@ -233,7 +233,7 @@
               >
                 About
               </a> -->
-              <div class="px-5 py-2 space-y-2 border-b border-black/10">
+              <div class="px-5 py-1 space-y-1 border-b border-black/10">
                 <div
                   class="flex justify-between items-center rounded-xl bg-beige-light shadow-inner"
                 >
@@ -241,7 +241,7 @@
                     routerLink="/contact"
                     routerLinkActive="bg-white rounded  text-chestnut!"
                     (click)="this.isMenuOpen.set(false)"
-                    class="block w-full text-center px-6 py-3 text-tertiary rounded-xl text-lg font-medium"
+                    class="block w-full text-center px-4 py-2 text-tertiary rounded-xl text-lg font-medium"
                   >
                     Contact
                   </a>
@@ -255,7 +255,7 @@
                 >Contact</a
               > -->
               @if (user()?.role?.includes(roles.ADMIN)) {
-                <div class="px-5 py-2 space-y-2 border-b border-black/10">
+                <div class="px-5 py-1 space-y-1 border-b border-black/10">
                   <div
                     class="flex justify-between items-center rounded-xl bg-beige-light shadow-inner"
                   >
@@ -263,7 +263,7 @@
                       routerLink="/add-product"
                       routerLinkActive="bg-white rounded  text-chestnut!"
                       (click)="this.isMenuOpen.set(false)"
-                      class="block w-full text-center px-6 py-3 text-tertiary rounded-xl text-lg font-medium"
+                      class="block w-full text-center px-4 py-2 text-tertiary rounded-xl text-lg font-medium"
                     >
                       Add Product
                     </a>

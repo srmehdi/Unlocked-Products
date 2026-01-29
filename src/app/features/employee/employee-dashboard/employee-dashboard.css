@@ -26,12 +26,15 @@
 }
 
 .dot {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   border-radius: 9999px;
   background: #9c8062;
   cursor: pointer;
   transition: all 0.3s ease;
+}
+.dot:hover {
+  background: white;
 }
 .dot-active {
   background: #38bdf8;
